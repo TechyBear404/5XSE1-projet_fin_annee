@@ -94,9 +94,9 @@ main {
   margin-bottom: 2rem;
 }
 
-#contact > div {
+#contact {
   width: 50%;
-  /* margin: 0px auto; */
+  margin: auto;
 }
 
 #contact-form {
@@ -106,14 +106,39 @@ main {
   justify-content: center;
 }
 
+#contact-form input.is-invalid {
+  border: 1px solid red;
+}
+
+#contact-form .btn-group label {
+  grid-area: label;
+}
+
+#contact-form .btn-group input {
+  grid-area: input;
+}
+
+#contact-form .btn-group .error {
+  grid-area: error;
+}
+
 #contact-form .btn-group {
+  margin: 0.2em;
   display: grid;
+  grid-template-areas:
+    "label input"
+    "a error";
   grid-template-columns: 1fr 3fr;
-  gap: 0.2rem;
 }
 
 #contact-form button[type="submit"] {
   margin: 2rem auto;
+}
+
+#contact-form .error {
+  color: red;
+  font-size: 0.8rem;
+  margin: 0.5rem 0px;
 }
 
 footer {
