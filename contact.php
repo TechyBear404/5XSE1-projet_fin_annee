@@ -13,28 +13,33 @@ require 'formulaires.php';
             <input type="hidden" name="formNom" value="formContact">
             <div class="btn-group">
                 <label for="nom">Nom</label>
-                <input type="text" class="<?= isset($errors["nom"]) ? 'is-invalid' : '' ?>" id="nom" name="nom" aria-describedby="email-erreur" aria-invalid="true">
+                <?= inputElem("input", "text", "nom", "nom", isset($errors["nom"]), $valeursEchappees["nom"] ?? null)  ?>
             </div>
             <div class="btn-group">
                 <label for="prenom">Prénom</label>
-                <input type="text" class="<?= isset($errors["prenom"]) ? 'is-invalid' : ''  ?>" id="prenom" name="prenom">
+                <?= inputElem("input", "text", "prenom", "prenom", isset($errors["prenom"]), $valeursEchappees["prenom"] ?? null)  ?>
             </div>
             <div class="btn-group">
                 <label for="email">Adresse email</label>
-                <input type="email" class="<?= isset($errors["email"]) ? 'is-invalid' : ''  ?>" id="email" name="email">
+                <?= inputElem("input", "text", "email", "email", isset($errors["email"]), $valeursEchappees["email"] ?? null)  ?>
             </div>
             <div class="btn-group">
                 <label for="message">Message</label>
-                <textarea class="<?= isset($errors["message"]) ? 'is-invalid' : ''  ?>" id="message" name="message"></textarea>
+                <?= inputElem("textarea", "textarea", "message", "message", isset($errors["message"]), $valeursEchappees["message"] ?? null)  ?>
             </div>
-            <?php if (!empty($errors)) {
-                foreach ($errors as $key => $error) {
-                    echo error($errors[$key]);
+            <?php if (!empty($errors)) { ?>
+                <ul class="error">
+                <?php foreach ($errors as $key => $error) {
+                    echo "<li> $error </li>";
                 }
             } ?>
+                </ul>
 
-            <button type="submit" class="">Envoyer</button>
+                <button type="submit" class="">Envoyer</button>
         </form>
+        <div id="alertPopup">
+
+        </div>
     </div>
 </div>
 <?php require_once 'footer.php'; ?>

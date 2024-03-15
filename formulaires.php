@@ -21,48 +21,94 @@ function error($errors)
   return $error;
 }
 
-function checkLength($input, $name, $min, $max)
+function inputElem($tag, $type, $id, $name, $isError, $escapedValue)
 {
-  if (strlen($input) < $min) {
-    return "Le champ $name doit contenir au moins $min caractères";
+  $inputValue = $escapedValue != null ? $escapedValue : '';
+  $errorElem = !$isError ?  ' aria-invalid="false">' : ' class="is-invalid" aria-invalid="true">';
+  if ($tag === "input") {
+    return '<input type="' . $type .  'id="' . $id . '" name="' . $name . '" value="' . $inputValue . '"' . $errorElem;
+  } else if ($tag === "textarea") {
+    return '<textarea id="' . $id . '" name="' . $name . '"' . $errorElem . $inputValue . '</textarea>';
   }
-  if (strlen($input) > $max) {
-    return "Le champ $name doit contenir moins de $max caractères";
+}
+
+$formRules = [
+  'nom' => [
+    'requis' => true,
+    'minLength' => 2,
+    'maxLength' => 255,
+  ],
+  'prenom' => [
+    'minLength' => 2,
+    'maxLength' => 255,
+  ],
+  'email' => [
+    'requis' => true,
+    'type' => "email",
+  ],
+  'message' => [
+    'requis' => true,
+    'minLength' => 10,
+    'maxLength' => 3000,
+  ],
+];
+
+$formMessages = [
+  "requis" => "Le champ %0% est requis",
+  "email" => "Veuillez entrer une adresse mail valide",
+  "minLength" => "Le champ %0% doit contenir au moins %1% caractères",
+  "maxLength" => "Le champ %0% doit contenir au maximum %1% caractères",
+  "envoiEchec" => "le formulaire n'a pas été envoyé!",
+  "envoiSucces" => "le formulaire a bien été envoyé!"
+];
+
+function verifChamps($formMessages, $formRules, $formData)
+{
+  $errors = [];
+  $valeursEchappees = [];
+
+  foreach ($formRules as $nomChamp => $rules) {
+    $cleanedData = cleanInput($formData[$nomChamp]);
+    $valeursEchappees[$nomChamp] = $cleanedData;
+    if ((isset($rules["minLength"]) || isset($rules["maxLength"])) && !empty($cleanedData)) {
+      if (strlen($cleanedData) < $rules["minLength"]) {
+        $message = str_replace(["%0%", "%1%"], [$nomChamp, $rules["minLength"]], $formMessages["maxLength"]);
+        $errors[$nomChamp] = $message;
+      }
+      if (strlen($cleanedData) > $rules["maxLength"]) {
+        $message = str_replace(["%0%", "%1%"], [$nomChamp, $rules["minLength"]], $formMessages["maxLength"]);
+        $errors[$nomChamp] = $message;
+      }
+    }
+    if (isset($rules["type"]) && !empty($cleanedData)) {
+      if (!filter_var($cleanedData, FILTER_VALIDATE_EMAIL)) {
+        $errors[$nomChamp] = $formMessages["email"];
+      }
+    }
+    if (isset($rules["requis"])) {
+      if (empty($cleanedData)) {
+        $message = str_replace("%0%", $nomChamp, $formMessages["requis"]);
+        $errors[$nomChamp] = $message;
+      }
+    }
   }
-  return null;
+  // echo '<pre>' . print_r($errors, true) . '</pre>';
+  // echo '<pre>' . print_r($valeursEchappees, true) . '</pre>';
+  return [$errors, $valeursEchappees];
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-  // $nom = $_POST["nom"];
-  // $nom = htmlentities($_POST["nom"]);
-  // echo $nom;
-  // echo "<script>" . $nom . "</script>";
-
   $formNom = $_POST["formNom"] ?? null;
 
-  $nom = cleanInput($_POST["nom"]);
-  $prenom = cleanInput($_POST["prenom"]);
-  $email = cleanInput($_POST["email"]);
-  $message = cleanInput($_POST["message"]);
-  $errors = [];
-
   if ($formNom === "formContact") {
-
-    if (empty($nom)) {
-      $errors["nom"][] = "Veuillez remplir les champs obligatoires";
-    } else {
-      $length = checkLength($nom, "nom", 2, 255);
-      if ($length) {
-        $errors["nom"][] = $length;
-      }
-    }
-
-    if (!empty($prenom)) {
-      $validLength = checkLength($prenom, "prénom", 2, 255);
-      if ($validLength) {
-        $errors["prenom"][] = $validLength;
-      }
+    [$errors, $valeursEchappees] = verifChamps($formMessages, $formRules, $_POST);
+    if (empty($errors)) {
+      echo '<script>';
+      echo 'alert("Votre message a bien été envoyé! ")';
+      // echo 'window.location.href = "contact.php";';
+      echo '</script>';
+      $valeursEchappees = [];
     }
   }
 }
