@@ -24,7 +24,7 @@ function error($errors)
 function inputElem($tag, $type, $id, $name, $isError, $escapedValue)
 {
   $inputValue = $escapedValue != null ? $escapedValue : '';
-  $errorElem = !$isError ?  ' aria-invalid="false">' : ' class="is-invalid" aria-invalid="true">';
+  $errorElem = !$isError ?  ' aria-invalid="false" required>' : ' class="is-invalid" aria-invalid="true">';
   if ($tag === "input") {
     return '<input type="' . $type .  'id="' . $id . '" name="' . $name . '" value="' . $inputValue . '"' . $errorElem;
   } else if ($tag === "textarea") {
@@ -72,11 +72,11 @@ function verifChamps($formMessages, $formRules, $formData)
     $valeursEchappees[$nomChamp] = $cleanedData;
     if ((isset($rules["minLength"]) || isset($rules["maxLength"])) && !empty($cleanedData)) {
       if (strlen($cleanedData) < $rules["minLength"]) {
-        $message = str_replace(["%0%", "%1%"], [$nomChamp, $rules["minLength"]], $formMessages["maxLength"]);
+        $message = str_replace(["%0%", "%1%"], [$nomChamp, $rules["minLength"]], $formMessages["minLength"]);
         $errors[$nomChamp] = $message;
       }
       if (strlen($cleanedData) > $rules["maxLength"]) {
-        $message = str_replace(["%0%", "%1%"], [$nomChamp, $rules["minLength"]], $formMessages["maxLength"]);
+        $message = str_replace(["%0%", "%1%"], [$nomChamp, $rules["maxLength"]], $formMessages["maxLength"]);
         $errors[$nomChamp] = $message;
       }
     }
@@ -97,6 +97,27 @@ function verifChamps($formMessages, $formRules, $formData)
   return [$errors, $valeursEchappees];
 }
 
+function sendMail($valeursEchappees) {
+  $destinataire = "ector.seb@gmail.com";
+  $sujet = "Demande Renseignements";
+  $message = "<html><body>";
+  $message .= "<p> Nom: ".$valeursEchappees["nom"]." Prénom: ". $valeursEchappees["prenom"]. "</p>";
+  $message .= "<p>adresse de contact: ".$valeursEchappees["email"]."</p>";
+  $message .= "<p>Message: ".$valeursEchappees["message"]."</p>";
+  $message .= "</body></html>";
+
+
+  // Tentative d'envoi du mail (retourne "true" en cas de réussite et "false" en cas d'echec).
+  if (mail($destinataire, $sujet, $message))
+  {
+      echo "Le courriel a été envoyé avec succès.";
+  }
+  else
+  {
+      echo "L'envoi du courriel a échoué.";
+  }
+};
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $formNom = $_POST["formNom"] ?? null;
@@ -104,11 +125,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if ($formNom === "formContact") {
     [$errors, $valeursEchappees] = verifChamps($formMessages, $formRules, $_POST);
     if (empty($errors)) {
-      echo '<script>';
-      echo 'alert("Votre message a bien été envoyé! ")';
-      // echo 'window.location.href = "contact.php";';
-      echo '</script>';
+      // echo '<script>';
+      // echo 'alert("Votre message a bien été envoyé! ")';
+      // // echo 'window.location.href = "contact.php";';
+      // echo '</script>';
+      sendMail($valeursEchappees);
       $valeursEchappees = [];
+      $error = [];
     }
   }
 }
