@@ -6,6 +6,8 @@ function classSuivantLeChemin()
     $pages = [
         BASE_URL . "/index.php" => 'Accueil',
         BASE_URL . "/contact.php" => 'Contact',
+        BASE_URL . "/auth/login.php" => 'Login',
+        BASE_URL . "/auth/register.php" => 'Register',
     ];
     foreach ($pages as $page => $label) {
         $class = ($_SERVER['REQUEST_URI'] == $page) ? 'active' : '';
@@ -22,7 +24,7 @@ function classSuivantLeChemin()
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="<?= $metaDescription ?>">
     <title><?= $pageTitre ?></title>
-    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
 </head>
 
 <body>

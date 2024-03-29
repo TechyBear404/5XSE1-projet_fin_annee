@@ -10,7 +10,7 @@ require 'formulaires.php';
     <div id="contact">
         <h2>Contact</h2>
         <form id="contact-form" action="contact.php" method="post">
-            <input type="hidden" name="formNom" value="formContact">
+            <!-- <input type="hidden" name="formNom" value="formContact"> -->
             <div class="btn-group">
                 <label for="nom">Nom</label>
                 <?= inputElem("input", "text", "nom", "nom", isset($errors["nom"]), $valeursEchappees["nom"] ?? null)  ?>

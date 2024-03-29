@@ -90,16 +90,19 @@ main {
 }
 
 .content h2 {
+  text-align: center;
   font-size: 2rem;
   margin-bottom: 2rem;
 }
 
-#contact {
+#contact,
+#login {
   width: 50%;
   margin: auto;
 }
 
-#contact-form {
+#contact-form,
+#login-form {
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -111,19 +114,23 @@ main {
   border: 1px solid red;
 }
 
-#contact-form .btn-group label {
+#contact-form .btn-group label,
+#login-form .btn-group label {
   grid-area: label;
 }
 
-#contact-form .btn-group input {
+#contact-form .btn-group input,
+#login-form .btn-group input {
   grid-area: input;
 }
 
-#contact-form .btn-group .error {
+#contact-form .btn-group .error,
+#login-form .btn-group .error {
   grid-area: error;
 }
 
-#contact-form .btn-group {
+#contact-form .btn-group,
+#login-form .btn-group {
   margin: 0.2em;
   display: grid;
   grid-template-areas:
@@ -132,11 +139,13 @@ main {
   grid-template-columns: 1fr 3fr;
 }
 
-#contact-form button[type="submit"] {
+#contact-form button[type="submit"],
+#login-form button[type="submit"] {
   margin: 2rem auto;
 }
 
-#contact-form .error {
+#contact-form .error,
+#login-form .error {
   color: red;
   font-size: 0.8rem;
   margin: 0.5rem 0px;
