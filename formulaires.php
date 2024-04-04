@@ -1,4 +1,4 @@
-<?php
+i<?php
 function cleanInput($input)
 {
   $input = trim($input);
@@ -140,12 +140,16 @@ function sendMail($valeursEchappees)
   }
 };
 
+
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $formNom = $_POST["formNom"] ?? null;
 
   // if ($formNom === "formContact") {
   [$errors, $valeursEchappees] = verifChamps($formMessages, $formRules, $_POST);
+  print_r($errors);
   if (empty($errors)) {
     sendMail($valeursEchappees);
     $valeursEchappees = [];
@@ -153,3 +157,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
   // }
 }
+
+

@@ -5,6 +5,7 @@ $pageTitre = "Login";
 $metaDescription = "Formulaire de connection";
 require_once '../header.php';
 require_once '../formulaires.php';
+require_once '../utils/auth.php'
 ?>
 
 
@@ -15,19 +16,11 @@ require_once '../formulaires.php';
     <form id="login-form" action="/auth/login.php" method="post">
       <div class="btn-group">
         <label for="pseudo">Pseudo</label>
-        <?= inputElem("input", "text", "pseudo", "pseudo", isset($errors["pseudo"]), $valeursEchappees["nom"] ?? null)  ?>
-      </div>
-      <div class="btn-group">
-        <label for="email">Email</label>
-        <?= inputElem("input", "text", "email", "email", isset($errors["email"]), $valeursEchappees["email"] ?? null)  ?>
+        <?= inputElem("input", "text", "pseudo", "pseudo", isset($errors["pseudo"]), $valeursEchappees["pseudo"] ?? null)  ?>
       </div>
       <div class="btn-group">
         <label for="pwd">Mot de passe</label>
         <?= inputElem("input", "text", "pwd", "pwd", isset($errors["pwd"]), null)  ?>
-      </div>
-      <div class="btn-group">
-        <label for="pwdConfirm">Confirmer MDP</label>
-        <?= inputElem("input", "text", "pwdConfirm", "pwdConfirm", isset($errors["pwdConfirm"]), null)  ?>
       </div>
 
       <?php if (!empty($errors)) { ?>

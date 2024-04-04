@@ -96,13 +96,15 @@ main {
 }
 
 #contact,
+#register,
 #login {
   width: 50%;
   margin: auto;
 }
 
 #contact-form,
-#login-form {
+#login-form,
+#register-form {
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -110,26 +112,31 @@ main {
 }
 
 #contact-form input.is-invalid,
+#register-form input.is-invalid,
 #contact-form textarea.is-invalid {
   border: 1px solid red;
 }
 
 #contact-form .btn-group label,
+#register-form .btn-group label,
 #login-form .btn-group label {
   grid-area: label;
 }
 
 #contact-form .btn-group input,
+#register-form .btn-group input,
 #login-form .btn-group input {
   grid-area: input;
 }
 
 #contact-form .btn-group .error,
+#register-form .btn-group .error,
 #login-form .btn-group .error {
   grid-area: error;
 }
 
 #contact-form .btn-group,
+#register-form .btn-group,
 #login-form .btn-group {
   margin: 0.2em;
   display: grid;
@@ -140,11 +147,13 @@ main {
 }
 
 #contact-form button[type="submit"],
+#register-form button[type="submit"],
 #login-form button[type="submit"] {
   margin: 2rem auto;
 }
 
 #contact-form .error,
+#register-form .error,
 #login-form .error {
   color: red;
   font-size: 0.8rem;
