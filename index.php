@@ -1,15 +1,31 @@
 <?php
-$pageTitre = "Accueil";
-$metaDescription = "Bienvenue sur la page principale";
-require_once 'header.php';
-?>
-<div class="content">
-  <article>
-    <h2>Bienvenue sur votre site web !</h2>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate odit ratione nemo eos excepturi, sapiente blanditiis earum laboriosam maxime exercitationem facilis, odio deserunt, eaque dicta. Quas vitae iste voluptatem error nobis amet velit eligendi nulla cum rem omnis mollitia sunt ipsam odio, ullam architecto voluptas assumenda dolorum? Repudiandae alias impedit ea exercitationem hic inventore saepe perspiciatis animi quas optio. At amet expedita veniam architecto ullam error, maxime, illo doloremque ut nulla totam animi voluptatibus sint. Vitae dolores, dolorum reprehenderit enim doloremque tempore, fugiat hic necessitatibus rerum soluta animi magnam dolore aliquam, illo id aliquid nemo autem! Non, corrupti ipsum veniam repellat aspernatur quidem harum asperiores nobis adipisci quae aperiam facere ut eius nesciunt quasi commodi ab ullam impedit fuga neque recusandae molestias omnis? Corporis illo non ipsa. Illo, culpa ullam ab atque omnis, voluptates dignissimos consequuntur quaerat aut temporibus nisi sit. Totam assumenda repudiandae, cupiditate modi placeat facere tempora voluptates labore ipsum impedit tempore at suscipit recusandae molestiae laudantium, quaerat itaque eius a magnam iste voluptate dolore qui architecto. Eum impedit illo dolores reiciendis molestias ullam aspernatur, ut nesciunt voluptate placeat! Autem sint et dignissimos. Quidem quibusdam blanditiis adipisci deleniti officia, neque iste commodi corporis rem sed voluptates eum ad ab similique. Minima ex nobis et neque autem pariatur error quas. Repellendus, voluptate adipisci aliquid quas et fugit, natus quo odit reprehenderit maiores recusandae dignissimos. Aut ratione aperiam illum numquam enim blanditiis, et nam placeat pariatur dolore corrupti ducimus, soluta quibusdam illo amet quisquam incidunt libero officia! Autem ut ea numquam dicta nemo dolorum, voluptatem laboriosam quisquam cupiditate placeat veritatis perspiciatis culpa architecto quam, rerum, facilis illo excepturi explicabo. Fugit dolorem nemo corrupti inventore sint nihil reprehenderit quia ab quo, ad impedit cupiditate dolor facere harum non eos quod odio libero voluptatibus beatae omnis aliquam fuga asperiores dicta! Amet maiores ullam voluptate facere sint quasi rem iusto sequi eligendi molestias aspernatur quaerat, explicabo dolorum laboriosam. Saepe natus est fuga quos velit doloribus hic officiis veniam placeat veritatis commodi in quasi cum delectus aut, reiciendis dolores quod provident molestiae qui. Ratione nostrum itaque molestias placeat dolores ullam molestiae qui maxime quidem? Nesciunt totam amet numquam deserunt, voluptates temporibus explicabo magnam dolor, repellat molestias perspiciatis sapiente omnis sit atque neque ea pariatur veritatis dolores maiores laboriosam! Cumque ducimus, vel suscipit culpa numquam corporis dignissimos aliquam nostrum nobis obcaecati, voluptas fuga fugiat quis reiciendis temporibus provident neque quisquam deleniti, assumenda mollitia quia dicta magnam saepe? Temporibus impedit, suscipit accusamus omnis possimus doloribus est iure fugit magnam asperiores, dolorem natus ipsum quam odio aliquid soluta libero voluptates, quibusdam molestiae quia. Dignissimos quos ea, vero possimus quibusdam eveniet iusto quasi alias laborum itaque? Natus quam suscipit molestias dolor repellendus, nemo sunt incidunt optio ad accusantium at, eveniet, in non quis odit nobis nihil corporis deserunt distinctio facere minima eaque. Quis doloremque labore molestias minus molestiae reiciendis eius quia eveniet quam! Repellat, iusto vero labore corporis impedit itaque sint maiores quas, blanditiis magni nisi sunt tempore nemo rem. Temporibus est ratione nulla veniam cumque mollitia ducimus.
-    </p>
-    <p>Modi ex consequatur aperiam, assumenda officiis quae neque laboriosam. Veniam quod laudantium ratione facilis, quidem unde quis consequatur! Cupiditate eaque vero asperiores dolorem cum rerum nam, voluptatem suscipit exercitationem fuga?</p>
-  </article>
-</div>
-<?php require_once 'footer.php'; ?>
+// Importer le routeur d'URL.
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Routeur.php';
+
+// Permet de distinguer le mode développement du mode production.
+// Ceci me permet d'utiliser des conditions pour réaliser certaines actions seulement si je suis dans un mode spécifique.
+// Par exemple, dans le fichier /core/gestion_bdd.php, les erreurs ne s'afficheront dans le navigateur que si la constante DEV_MODE a été définie et que sa valeur vaut "true".
+define('DEV_MODE', true);
+
+// Chemin de base de l'application (Utile si l'application est hebergée dans un sous-dossier. Dans ce cas, n'oubliez pas d'adapter le fichier .htaccess).
+// Par exemple si votre url racine est le suviant : localhost/monprojet/,
+// Alors vous devrez configurer BASE_URL à '/monprojet' et dans le fichier .htacces : RewriteCond %{REQUEST_URI} !^/monprojet/public/
+define('BASE_URL', '');
+
+// Définir la langue.
+// define('LANGUE', 'fr');
+
+// Routes :
+$patterns = ['id' => '\d+'];
+$routes = [
+    getRoute('GET', '/', 'AccueilController', 'index'),
+    // getRoute('GET', '/admin-gestion-utilisateur', 'AdminGestionUtilisateurController', 'index'),
+    // getRoute('DELETE', '/admin-gestion-utilisateur', 'AdminGestionUtilisateurController', 'detruire'),
+    // getRoute('GET', '/admin-gestion-utilisateur/creer', 'AdminGestionUtilisateurController', 'creer'),
+    // getRoute('POST', '/admin-gestion-utilisateur/creer', 'AdminGestionUtilisateurController', 'stocker'),
+    // getRoute('GET', '/admin-gestion-utilisateur/{id}', 'AdminGestionUtilisateurController', 'montrer'),
+    // getRoute('GET', '/admin-gestion-utilisateur/{id}/editer', 'AdminGestionUtilisateurController', 'editer'),
+    // getRoute('PUT', '/admin-gestion-utilisateur/{id}/editer', 'AdminGestionUtilisateurController', 'actualiser')
+];
+
+startRouter($routes, $patterns);

@@ -5,7 +5,7 @@ $pageTitre = "register";
 $metaDescription = "Formulaire d'enregistrement";
 require_once '../header.php';
 require_once '../formulaires.php';
-require_once '../utils/auth.php'
+require_once '../auth.php'
 ?>
 
 
