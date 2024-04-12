@@ -19,6 +19,13 @@ define('BASE_URL', '');
 $patterns = ['id' => '\d+'];
 $routes = [
     getRoute('GET', '/', 'AccueilController', 'index'),
+    // create routes for authetication page login register
+    getRoute('GET', '/login', 'AuthController', 'index'),
+    getRoute('POST', '/login', 'AuthController', 'connectUser'),
+    getRoute('GET', '/register', 'AuthController', 'create'),
+    // getRoute('GET', '/user', 'AuthController', 'index'),
+    // getRoute('GET', '/user/create', 'AuthController', 'create'),
+    // getRoute('GET', '/user/', 'AuthController', 'index'),
     // getRoute('GET', '/admin-gestion-utilisateur', 'AdminGestionUtilisateurController', 'index'),
     // getRoute('DELETE', '/admin-gestion-utilisateur', 'AdminGestionUtilisateurController', 'detruire'),
     // getRoute('GET', '/admin-gestion-utilisateur/creer', 'AdminGestionUtilisateurController', 'creer'),

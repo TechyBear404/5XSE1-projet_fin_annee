@@ -1,11 +1,6 @@
 <?php
-// define('BASE_URL', "/5xse1/projet_fin_annee");
-
-$pageTitre = "Login";
-$metaDescription = "Formulaire de connection";
-require_once '../header.php';
-require_once '../formulaires.php';
-require_once '../utils/auth.php'
+// require_once '../formulaires.php';
+// require_once '../utils/auth.php'
 ?>
 
 
@@ -13,14 +8,14 @@ require_once '../utils/auth.php'
 <div class="content">
   <div id="login">
     <h2>Login</h2>
-    <form id="login-form" action="/auth/login.php" method="post">
+    <form id="login-form" method="POST">
       <div class="btn-group">
         <label for="pseudo">Pseudo</label>
-        <?= inputElem("input", "text", "pseudo", "pseudo", isset($errors["pseudo"]), $valeursEchappees["pseudo"] ?? null)  ?>
+        <input type="text" name="pseudo" id="pseudo" value="<?= $args['valeursEchappees']['pseudo'] ?? '' ?>" class="<?= $args['errors']['pseudo'] ? 'is-invalid' : '' ?>">
       </div>
       <div class="btn-group">
         <label for="pwd">Mot de passe</label>
-        <?= inputElem("input", "text", "pwd", "pwd", isset($errors["pwd"]), null)  ?>
+        <input type="text" name="pwd" id="pwd" value="<?= $args['valeursEchappees']['pwd'] ?? '' ?>" class="<?= $args['errors']['pwd'] ? 'is-invalid' : '' ?>">
       </div>
 
       <?php if (!empty($errors)) { ?>
@@ -38,4 +33,3 @@ require_once '../utils/auth.php'
     </div>
   </div>
 </div>
-<?php require_once '../footer.php'; ?>

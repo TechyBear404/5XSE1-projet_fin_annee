@@ -13,7 +13,8 @@ function createNavItem(string $segmentUrl, string $pageName): string
 function createNavItems(): string
 {
   return createNavItem(BASE_URL . '/', 'Accueil') .
-    createNavItem(BASE_URL . '/admin-gestion-utilisateur', 'Gestion Utilisateurs');
+    createNavItem(BASE_URL . '/login', 'Inscription') .
+    createNavItem(BASE_URL . '/register', 'Connection');
 }
 ?>
 
