@@ -2,7 +2,7 @@
 
 function showView(array $pageInfos, string $action, ?array $args = []): void
 {
-    echo '<pre>' . print_r($args, true) . '</pre>';
+    // echo '<pre>' . print_r($args, true) . '</pre>';
     // Enregistrer le chemin vers le dossier des vues pour faciliter la lecture et éviter les répétitions.
     $viewPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR;
 

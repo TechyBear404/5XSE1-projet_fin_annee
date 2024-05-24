@@ -15,11 +15,15 @@ function getRules()
         'type' => 'email',
         'unique' => 'users'
       ],
-      'pwd' => [
+      'password' => [
         'required' => true,
         'type' => 'password',
         'minLength' => 8,
         'maxLength' => 72,
+      ],
+      'passwordConfirm' => [
+        'required' => true,
+        'type' => 'passwordConfirm',
       ]
     ],
     "errors" => [
@@ -27,6 +31,7 @@ function getRules()
       'minLength' => "Le champ %0% doit contenir au moins %1% caractères.",
       'maxLength' => "Le champ %0% doit contenir au maximum %1% caractères.",
       'email' => "Le champ %0% doit être une adresse email valide.",
+      'passwordConfirm' => 'Les mots de passe ne correspondent pas.',
       'unique' => "Le champ %0% est déjà utilisé."
     ]
   ];

@@ -4,14 +4,16 @@ require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPA
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'FormManager.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR . 'userModel.php';
 
+$args = [];
+
 // Communiquer les informations de la page nécessaire au bon fonctionnement de la vue :
 function getPageInfos(): array
 {
   return [
-    'vue' => 'auth',
-    'title' => "Page d'Inscription",
-    'description' => "Formulaire d'inscription pour créer un compte utilisateur.",
-    'baseUrlPage' => BASE_URL . '/' . 'login'
+    'vue' => 'contact',
+    'title' => "Page de contact",
+    'description' => "Formulaire de contact.",
+    'baseUrlPage' => BASE_URL . '/' . 'contact'
   ];
 }
 
@@ -19,7 +21,7 @@ function getPageInfos(): array
 function index(?array $args = []): void
 {
   // Afficher la vue "vue_accueil.php".
-  showView(getPageInfos(), 'login', $args);
+  showView(getPageInfos(), 'contact', $args);
 }
 
 // function creer(?array $args = []): void
@@ -28,15 +30,34 @@ function index(?array $args = []): void
 //   showView(getPageInfos(), 'creer', $args);
 // }
 
-function connectUser(): void
+function sendContactRequest(): void
 {
-  $args = [];
+  // $args = [];
   $formRules = getRules();
   [$errors, $valeursEchappees] = verifChamps($formRules["errors"], $formRules["rules"], $_POST);
   $args["errors"] = $errors;
   $args["valeursEchappees"] = $valeursEchappees;
-  // echo '<pre>' . print_r($errors, true) . '</pre>';
-  // echo '<pre>' . print_r($valeursEchappees, true) . '</pre>';
+
   // Appeler la vue.
   index($args);
 }
+
+
+function sendMail($valeursEchappees)
+{
+  $destinataire = "ector.seb@gmail.com";
+  $sujet = "Demande Renseignements";
+  $message = "<html><body>";
+  $message .= "<p> Nom: " . $valeursEchappees["nom"] . " Prénom: " . $valeursEchappees["prenom"] . "</p>";
+  $message .= "<p>adresse de contact: " . $valeursEchappees["email"] . "</p>";
+  $message .= "<p>Message: " . $valeursEchappees["message"] . "</p>";
+  $message .= "</body></html>";
+
+
+  // Tentative d'envoi du mail (retourne "true" en cas de réussite et "false" en cas d'echec).
+  if (mail($destinataire, $sujet, $message)) {
+    echo "Le courriel a été envoyé avec succès.";
+  } else {
+    echo "L'envoi du courriel a échoué.";
+  }
+};

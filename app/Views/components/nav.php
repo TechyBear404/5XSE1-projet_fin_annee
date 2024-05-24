@@ -13,8 +13,9 @@ function createNavItem(string $segmentUrl, string $pageName): string
 function createNavItems(): string
 {
   return createNavItem(BASE_URL . '/', 'Accueil') .
-    createNavItem(BASE_URL . '/login', 'Inscription') .
-    createNavItem(BASE_URL . '/register', 'Connection');
+    createNavItem(BASE_URL . '/login', 'Connection') .
+    createNavItem(BASE_URL . '/register', 'Inscription') .
+    createNavItem(BASE_URL . '/contact', 'Contact');
 }
 ?>
 

@@ -92,6 +92,17 @@ i<?php
             $errors[$key] = $formMessages["email"];
           }
         }
+        if ($rule === "type" && $value === "password") {
+          if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/", $cleanedData)) {
+            $errors[$key] = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre";
+          }
+        }
+        if ($rule === "type" && $value === "passwordConfirm") {
+
+          if ($cleanedData !== $formData["password"]) {
+            $errors[$key] = "Les mots de passe ne correspondent pas";
+          }
+        }
       }
     }
 
@@ -123,24 +134,24 @@ i<?php
     return [$errors, $valeursEchappees];
   }
 
-  function sendMail($valeursEchappees)
-  {
-    $destinataire = "ector.seb@gmail.com";
-    $sujet = "Demande Renseignements";
-    $message = "<html><body>";
-    $message .= "<p> Nom: " . $valeursEchappees["nom"] . " Prénom: " . $valeursEchappees["prenom"] . "</p>";
-    $message .= "<p>adresse de contact: " . $valeursEchappees["email"] . "</p>";
-    $message .= "<p>Message: " . $valeursEchappees["message"] . "</p>";
-    $message .= "</body></html>";
+  // function sendMail($valeursEchappees)
+  // {
+  //   $destinataire = "ector.seb@gmail.com";
+  //   $sujet = "Demande Renseignements";
+  //   $message = "<html><body>";
+  //   $message .= "<p> Nom: " . $valeursEchappees["nom"] . " Prénom: " . $valeursEchappees["prenom"] . "</p>";
+  //   $message .= "<p>adresse de contact: " . $valeursEchappees["email"] . "</p>";
+  //   $message .= "<p>Message: " . $valeursEchappees["message"] . "</p>";
+  //   $message .= "</body></html>";
 
 
-    // Tentative d'envoi du mail (retourne "true" en cas de réussite et "false" en cas d'echec).
-    if (mail($destinataire, $sujet, $message)) {
-      echo "Le courriel a été envoyé avec succès.";
-    } else {
-      echo "L'envoi du courriel a échoué.";
-    }
-  };
+  //   // Tentative d'envoi du mail (retourne "true" en cas de réussite et "false" en cas d'echec).
+  //   if (mail($destinataire, $sujet, $message)) {
+  //     echo "Le courriel a été envoyé avec succès.";
+  //   } else {
+  //     echo "L'envoi du courriel a échoué.";
+  //   }
+  // };
 
 
 

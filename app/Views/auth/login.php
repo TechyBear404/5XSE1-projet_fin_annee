@@ -11,11 +11,11 @@
     <form id="login-form" method="POST">
       <div class="btn-group">
         <label for="pseudo">Pseudo</label>
-        <input type="text" name="pseudo" id="pseudo" value="<?= $args['valeursEchappees']['pseudo'] ?? '' ?>" class="<?= $args['errors']['pseudo'] ? 'is-invalid' : '' ?>">
+        <input type="text" name="pseudo" id="pseudo" value="<?= $args['valeursEchappees']['pseudo'] ?? '' ?>" class="<?= isset($args['errors']['pseudo']) ? 'is-invalid' : '' ?>">
       </div>
       <div class="btn-group">
         <label for="pwd">Mot de passe</label>
-        <input type="text" name="pwd" id="pwd" value="<?= $args['valeursEchappees']['pwd'] ?? '' ?>" class="<?= $args['errors']['pwd'] ? 'is-invalid' : '' ?>">
+        <input type="text" name="pwd" id="pwd" value="<?= $args['valeursEchappees']['pwd'] ?? '' ?>" class="<?= isset($args['errors']['pwd']) ? 'is-invalid' : '' ?>">
       </div>
 
       <?php if (!empty($errors)) { ?>

@@ -16,19 +16,19 @@
     <form id="register-form" method="post">
       <div class="btn-group">
         <label for="pseudo">Pseudo</label>
-        <input type="text" name="pseudo" id="pseudo" value="<?= $valeursEchappees['pseudo'] ?? '' ?>" class="<?= $errors["pseudo"] ? 'is-invalid' : '' ?>">
+        <input type="text" name="pseudo" id="pseudo" value="<?= $valeursEchappees['pseudo'] ?? '' ?>" class="<?= !empty($errors["pseudo"]) ? 'is-invalid' : '' ?>">
       </div>
       <div class="btn-group">
         <label for="email">Email</label>
-        <input type="text" name="email" id="email" value="<?= $valeursEchappees['email'] ?? '' ?>" class="<?= $errors["email"] ? 'is-invalid' : '' ?>">
+        <input type="text" name="email" id="email" value="<?= $valeursEchappees['email'] ?? '' ?>" class="<?= !empty($errors["email"]) ? 'is-invalid' : '' ?>">
       </div>
       <div class="btn-group">
-        <label for="pwd">Mot de passe</label>
-        <input type="text" name="pwd" id="pwd" value="<?= $valeursEchappees['pwd'] ?? '' ?>" class="<?= $errors["pwd"] ? 'is-invalid' : '' ?>">
+        <label for="password">Mot de passe</label>
+        <input type="text" name="password" id="password" value="<?= $valeursEchappees['password'] ?? '' ?>" class="<?= !empty($errors["password"]) ? 'is-invalid' : '' ?>">
       </div>
       <div class="btn-group">
-        <label for="pwdConfirm">Confirmer MDP</label>
-        <input type="text" name="pwdConfirm" id="pwdConfirm" value="<?= $valeursEchappees['pwdConfirm'] ?? '' ?>" class="<?= $errors["pwdConfirm"] ? 'is-invalid' : '' ?>">
+        <label for="passwordConfirm">Confirmer MDP</label>
+        <input type="text" name="passwordConfirm" id="passwordConfirm" value="<?= $valeursEchappees['passwordConfirm'] ?? '' ?>" class="<?= !empty($errors["passwordConfirm"]) ? 'is-invalid' : '' ?>">
       </div>
 
       <?php if (!empty($errors)) { ?>
@@ -46,4 +46,4 @@
     </div>
   </div>
 </div>
-<?php require_once '../footer.php'; ?>
+<!-- <?php require_once '../footer.php'; ?> -->
