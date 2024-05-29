@@ -34,10 +34,26 @@ function createUser(): void
 {
   // $args = [];
   $formRules = getRules();
-  [$errors, $valeursEchappees] = verifChamps($formRules["errors"], $formRules["rules"], $_POST);
+  [$errors, $valeursEchappees] = verifChamps($formRules, $_POST);
   $args["errors"] = $errors;
   $args["valeursEchappees"] = $valeursEchappees;
 
   // Appeler la vue.
-  index($args);
+  if (empty($errors)) {
+    $pseudo = $valeursEchappees["pseudo"];
+    $email = $valeursEchappees["email"];
+    $password = $valeursEchappees["password"];
+
+    $newUser = createNewUser($pseudo, $email, $password);
+    if ($newUser) {
+      $args = [];
+      $args["success"] = "Votre compte a été créé avec succès.";
+    } else {
+      $args["errors"]["db"] = "Une erreur s'est produite lors de la création de votre compte.";
+    }
+    // echo '<pre>' . print_r($newUser, true) . '</pre>';
+    index($args);
+  } else {
+    index($args);
+  }
 }

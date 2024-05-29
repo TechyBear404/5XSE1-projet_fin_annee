@@ -6,27 +6,26 @@ $metaDescription = "Formulaire de contact";
 ?>
 
 
-<div class="content">
+<div class="content mt-10">
     <div id="contact">
-        <h2>Contact</h2>
+        <h2 class="text-4xl text-center mb-6">Contact</h2>
         <form id="contact-form" method="post">
             <!-- <input type="hidden" name="formNom" value="formContact"> -->
             <div class="btn-group">
-                <label for="nom">Nom</label>
-                <input type="text" name="nom" id="nom" value="<?= $args['valeursEchappees']['nom'] ?? '' ?>" class="<?= !empty($errors["nom"]) ? 'is-invalid' : '' ?>">
+                <label for="firstName">Prénom</label>
+                <input type="text" name="firstName" id="firstName" value="<?= $args['valeursEchappees']['firstName'] ?? '' ?>" class="<?= !empty($errors["firstName"]) ? 'is-invalid' : '' ?> text-black">
             </div>
             <div class="btn-group">
-                <label for="prenom">Prénom</label>
-                <input type="text" name="prenom" id="prenom" value="<?= $args['valeursEchappees']['prenom'] ?? '' ?>" class="<?= !empty($errors["prenom"]) ? 'is-invalid' : '' ?>">
+                <label for="lastName">Nom</label>
+                <input type="text" name="lastName" id="lastName" value="<?= $args['valeursEchappees']['lastName'] ?? '' ?>" class="<?= !empty($errors["lastName"]) ? 'is-invalid' : '' ?> text-black">
             </div>
             <div class="btn-group">
                 <label for="email">Adresse email</label>
-                <input type="text" name="email" id="email" value="<?= $args['valeursEchappees']['email'] ?? '' ?>" class="<?= !empty($errors["email"]) ? 'is-invalid' : '' ?>">
+                <input type="text" name="email" id="email" value="<?= $args['valeursEchappees']['email'] ?? '' ?>" class="<?= !empty($errors["email"]) ? 'is-invalid' : '' ?> text-black">
             </div>
             <div class="btn-group">
                 <label for="message">Message</label>
-                <!-- <input type="text" name="email" id="email" value="<?= $args['valeursEchappees']['email'] ?? '' ?>" class=""> -->
-                <textarea name="message" id="message" class="<?= !empty($errors["message"]) ? 'is-invalid' : '' ?>" cols="30" rows="10"><?= $args['valeursEchappees']['message'] ?? '' ?></textarea>
+                <textarea name="message" id="message" class="<?= !empty($errors["message"]) ? 'is-invalid' : '' ?> text-black" cols="" rows="10"><?= $args['valeursEchappees']['message'] ?? '' ?></textarea>
             </div>
             <?php if (!empty($errors)) { ?>
                 <ul class="error">
@@ -36,7 +35,7 @@ $metaDescription = "Formulaire de contact";
             } ?>
                 </ul>
 
-                <button type="submit" class="">Envoyer</button>
+                <button type="submit" class="bg-blue-700 px-4 py-1 rounded-md hover:bg-blue-600">Envoyer</button>
         </form>
         <div id="alertPopup">
 

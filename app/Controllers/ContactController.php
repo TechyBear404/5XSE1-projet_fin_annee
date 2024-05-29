@@ -2,7 +2,7 @@
 // Importer le gestionnaire de vues.
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'GestionVue.php';
 require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'FormManager.php';
-require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR . 'userModel.php';
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR . 'contactModel.php';
 
 $args = [];
 
@@ -33,8 +33,9 @@ function index(?array $args = []): void
 function sendContactRequest(): void
 {
   // $args = [];
-  $formRules = getRules();
-  [$errors, $valeursEchappees] = verifChamps($formRules["errors"], $formRules["rules"], $_POST);
+  $formRules = getContactRules();
+  // echo '<pre>' . print_r($formRules, true) . '</pre>';
+  [$errors, $valeursEchappees] = verifChamps($formRules, $_POST);
   $args["errors"] = $errors;
   $args["valeursEchappees"] = $valeursEchappees;
 

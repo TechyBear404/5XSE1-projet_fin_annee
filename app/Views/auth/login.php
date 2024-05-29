@@ -14,8 +14,8 @@
         <input type="text" name="pseudo" id="pseudo" value="<?= $args['valeursEchappees']['pseudo'] ?? '' ?>" class="<?= isset($args['errors']['pseudo']) ? 'is-invalid' : '' ?>">
       </div>
       <div class="btn-group">
-        <label for="pwd">Mot de passe</label>
-        <input type="text" name="pwd" id="pwd" value="<?= $args['valeursEchappees']['pwd'] ?? '' ?>" class="<?= isset($args['errors']['pwd']) ? 'is-invalid' : '' ?>">
+        <label for="password">Mot de passe</label>
+        <input type="text" name="password" id="password" value="<?= $args['valeursEchappees']['password'] ?? '' ?>" class="<?= isset($args['errors']['password']) ? 'is-invalid' : '' ?>">
       </div>
 
       <?php if (!empty($errors)) { ?>

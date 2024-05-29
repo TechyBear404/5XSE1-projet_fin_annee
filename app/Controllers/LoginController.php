@@ -34,10 +34,10 @@ function connectUser(): void
 {
   // $args = [];
   $formRules = getRules();
-  [$errors, $valeursEchappees] = verifChamps($formRules["errors"], $formRules["rules"], $_POST);
+  [$errors, $valeursEchappees] = verifChamps($formRules, $_POST);
   $args["errors"] = $errors;
   $args["valeursEchappees"] = $valeursEchappees;
-
+  echo '<pre>' . print_r($args, true) . '</pre>';
   // Appeler la vue.
   index($args);
 }
