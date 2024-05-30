@@ -88,8 +88,26 @@ function updateUser(int $id, string $pseudo, string $email, ?string $password = 
 
 function deleteUser(int $id)
 {
-  $db = db();
   $table = getTable();
   $sql = "DELETE FROM $table WHERE useID = :id";
   return executeQuery($sql, [':id' => $id]);
+}
+
+function connectUser($pseudo, $password)
+{
+  $table = getTable();
+  $sql = "SELECT * FROM $table WHERE usePseudo = :pseudo";
+  $user = executeQuery($sql, [':pseudo' => $pseudo])->fetch(PDO::FETCH_ASSOC);
+
+  if (!empty($user) && password_verify($password, $user['usePassword'])) {
+    $_SESSION['user'] = $user;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function disconnectUser()
+{
+  session_destroy();
 }

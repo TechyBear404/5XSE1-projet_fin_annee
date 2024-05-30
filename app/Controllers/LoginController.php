@@ -17,27 +17,34 @@ function getPageInfos(): array
   ];
 }
 
-// index : Afficher la liste des utilisateurs (il s'agit de la partie chargée par défaut) :
 function index(?array $args = []): void
 {
-  // Afficher la vue "vue_accueil.php".
+  // Afficher la page de connection.
   showView(getPageInfos(), 'login', $args);
 }
 
-// function creer(?array $args = []): void
-// {
-//   // Appeler la vue.
-//   showView(getPageInfos(), 'creer', $args);
-// }
-
-function connectUser(): void
+function loginUser(): void
 {
   // $args = [];
   $formRules = getRules();
   [$errors, $valeursEchappees] = verifChamps($formRules, $_POST);
   $args["errors"] = $errors;
   $args["valeursEchappees"] = $valeursEchappees;
-  echo '<pre>' . print_r($args, true) . '</pre>';
+  // echo '<pre>' . print_r($args, true) . '</pre>';
   // Appeler la vue.
-  index($args);
+  if (empty($errors)) {
+    $pseudo = $valeursEchappees["pseudo"];
+    $password = $valeursEchappees["password"];
+
+    $user = connectUser($pseudo, $password);
+    if ($user) {
+
+      header('Location: ' . BASE_URL . '/profile');
+    } else {
+      $args["errors"]["db"] = "Une erreur s'est produite lors de la connection de votre compte.";
+      index($args);
+    }
+  } else {
+    index($args);
+  }
 }

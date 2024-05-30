@@ -1,26 +1,28 @@
 <?php
-function createNavItem(string $segmentUrl, string $pageName): string
+
+function createNavItems()
 {
-  $currentPage = $_SERVER['REQUEST_URI'] === $segmentUrl;
-  $classCss = $currentPage ? 'active' : '';
-  ob_start();
-?>
-  <li><a class="<?= $classCss ?>" href="<?= $segmentUrl ?>"><?= $pageName ?></a></li>
-<?php
-  return ob_get_clean();
+  $pages = [
+    ["url" => BASE_URL . '/', "name" => 'Accueil'],
+    ["url" => BASE_URL . '/contact', "name" => 'Contact'],
+    ["url" => BASE_URL . '/register', "name" => 'Enregistrement', "auth" => false],
+    ["url" => BASE_URL . '/login', "name" => 'Connexion', "auth" => false],
+    ["url" => BASE_URL . '/logout', "name" => 'Déconnexion', "auth" => true],
+    ["url" => BASE_URL . '/profile', "name" => 'Profile', "auth" => true],
+  ];
+
+  $navlist = '';
+  foreach ($pages as $page) {
+    $classCss = $_SERVER['REQUEST_URI'] === $page['url'] ? 'scale-125 underline' : '';
+    if (isset($page['auth'])) {
+      if ($page['auth'] === true && isset($_SESSION['user'])) {
+        $navlist .= "<li class='nav-item'><a href='{$page['url']}' class='$classCss'>{$page['name']}</a></li>";
+      } elseif ($page['auth'] === false && !isset($_SESSION['user'])) {
+        $navlist .= "<li class='nav-item'><a href='{$page['url']}' class='$classCss'>{$page['name']}</a></li>";
+      }
+    } else {
+      $navlist .= "<li class='nav-item'><a href='{$page['url']}' class='$classCss'>{$page['name']}</a></li>";
+    }
+  }
+  return $navlist;
 }
-
-function createNavItems(): string
-{
-  return createNavItem(BASE_URL . '/', 'Accueil') .
-    createNavItem(BASE_URL . '/login', 'Connection') .
-    createNavItem(BASE_URL . '/register', 'Inscription') .
-    createNavItem(BASE_URL . '/contact', 'Contact');
-}
-?>
-
-
-<!-- BASE_URL . "/index.php" => 'Accueil',
-BASE_URL . "/contact.php" => 'Contact',
-BASE_URL . "/auth/login.php" => 'Login',
-BASE_URL . "/auth/register.php" => 'Register', -->

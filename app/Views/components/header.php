@@ -14,10 +14,10 @@ $nav = createNavItems();
     <title><?= $pageTitle ?? '' ?></title>
 </head>
 
-<body class="mt-10">
-    <header class="">
-        <nav>
-            <ul>
+<body class="mt-14">
+    <header class="h-12 fixed top-0 w-full bg-slate-950">
+        <nav class="w-full h-full">
+            <ul class="flex gap-6 justify-center items-center h-full font-bold uppercase">
                 <?= $nav ?>
             </ul>
         </nav>

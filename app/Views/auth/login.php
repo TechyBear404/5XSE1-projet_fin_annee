@@ -7,7 +7,7 @@
 
 <div class="content">
   <div id="login">
-    <h2>Login</h2>
+    <h2 class="text-4xl text-center mb-6">Login</h2>
     <form id="login-form" method="POST">
       <div class="btn-group">
         <label for="pseudo">Pseudo</label>

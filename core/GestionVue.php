@@ -13,7 +13,7 @@ function showView(array $pageInfos, string $action, ?array $args = []): void
         extract($args);
     }
     // Importer l'entête.
-    require_once $viewPathComponents . 'header.php';
+    require $viewPathComponents . 'header.php';
     // Importer le contenu de la page.
     require_once $viewPath . $pageInfos['vue'] . DIRECTORY_SEPARATOR . $action . '.php';
     // Importer le pied de page.

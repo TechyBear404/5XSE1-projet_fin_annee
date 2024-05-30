@@ -12,7 +12,7 @@
 
 <div class="content">
   <div id="register">
-    <h2>Register</h2>
+    <h2 class="text-4xl text-center mb-6">Enregistre toi!</h2>
     <form id="register-form" method="post">
       <div class="btn-group">
         <label for="pseudo">Pseudo</label>

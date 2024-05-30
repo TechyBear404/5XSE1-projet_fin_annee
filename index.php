@@ -2,6 +2,7 @@
 // Importer le routeur d'URL.
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Routeur.php';
 
+// charger les variables d'environnement
 $env = file_get_contents(__DIR__ . "/.env");
 $lines = explode("\n", $env);
 
@@ -25,27 +26,35 @@ define('BASE_URL', '');
 // Définir la langue.
 // define('LANGUE', 'fr');
 
+// init session cookie
+$lifeTime = 7 * 24 * 60 * 60;
+
+ini_set('session.use_strict_mode', 1);
+ini_set('session.use_only_cookies', 1);
+session_set_cookie_params([
+    // 'lifetime' => $lifeTime,
+    'path' => '/',
+    'secure' => false,
+    'httponly' => false,
+    'samesite' => 'lax'
+]);
+session_start();
+
 // Routes :
 $patterns = ['id' => '\d+'];
+
 $routes = [
     getRoute('GET', '/', 'AccueilController', 'index'),
     // create routes for authetication page login register
     getRoute('GET', '/login', 'LoginController', 'index'),
-    getRoute('POST', '/login', 'LoginController', 'connectUser'),
+    getRoute('POST', '/login', 'LoginController', 'loginUser'),
     getRoute('GET', '/register', 'RegisterController', 'index'),
     getRoute('POST', '/register', 'RegisterController', 'createUser'),
     getRoute('GET', '/contact', 'ContactController', 'index'),
     getRoute('POST', '/contact', 'ContactController', 'sendContactRequest'),
-    // getRoute('GET', '/user', 'AuthController', 'index'),
-    // getRoute('GET', '/user/create', 'AuthController', 'create'),
-    // getRoute('GET', '/user/', 'AuthController', 'index'),
-    // getRoute('GET', '/admin-gestion-utilisateur', 'AdminGestionUtilisateurController', 'index'),
-    // getRoute('DELETE', '/admin-gestion-utilisateur', 'AdminGestionUtilisateurController', 'detruire'),
-    // getRoute('GET', '/admin-gestion-utilisateur/creer', 'AdminGestionUtilisateurController', 'creer'),
-    // getRoute('POST', '/admin-gestion-utilisateur/creer', 'AdminGestionUtilisateurController', 'stocker'),
-    // getRoute('GET', '/admin-gestion-utilisateur/{id}', 'AdminGestionUtilisateurController', 'montrer'),
-    // getRoute('GET', '/admin-gestion-utilisateur/{id}/editer', 'AdminGestionUtilisateurController', 'editer'),
-    // getRoute('PUT', '/admin-gestion-utilisateur/{id}/editer', 'AdminGestionUtilisateurController', 'actualiser')
+    getRoute('GET', '/profile', 'ProfileController', 'index'),
+    getRoute('GET', '/logout', 'ProfileController', 'logout'),
+
 ];
 
 startRouter($routes, $patterns);
