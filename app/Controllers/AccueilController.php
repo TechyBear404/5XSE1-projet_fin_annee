@@ -1,6 +1,6 @@
 <?php
 // Importer le gestionnaire de vues.
-require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'GestionVue.php';
+require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'GestionVue.php';
 
 // phpinfo();
 // Communiquer les informations de la page nécessaire au bon fonctionnement de la vue :

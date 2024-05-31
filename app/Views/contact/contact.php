@@ -1,9 +1,9 @@
-<?php
-$pageTitre = "Contact";
-$metaDescription = "Formulaire de contact";
-// require_once 'header.php';
-// require 'formulaires.php';
-?>
+<!-- <?php
+        $pageTitre = "Contact";
+        $metaDescription = "Formulaire de contact";
+        // require_once 'header.php';
+        // require 'formulaires.php';
+        ?> -->
 
 
 <div class="mt-10 max-w-5xl mx-auto ">

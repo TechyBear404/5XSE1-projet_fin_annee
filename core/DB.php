@@ -15,6 +15,7 @@ function db(): ?PDO
 
 function executeQuery(string $sql, ?array $params = null)
 {
+  // echo "<pre> print_r($sql)</pre>";
   $db = db();
   try {
     if ($params) {

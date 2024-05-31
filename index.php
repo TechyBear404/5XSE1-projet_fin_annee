@@ -1,6 +1,7 @@
 <?php
 // Importer le routeur d'URL.
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Routeur.php';
+define('DS', DIRECTORY_SEPARATOR);
+require_once __DIR__ . DS . 'core' . DS . 'Routeur.php';
 
 // charger les variables d'environnement
 $env = file_get_contents(__DIR__ . "/.env");
@@ -35,7 +36,7 @@ session_set_cookie_params([
     // 'lifetime' => $lifeTime,
     'path' => '/',
     'secure' => false,
-    'httponly' => false,
+    'httponly' => true,
     'samesite' => 'lax'
 ]);
 session_start();

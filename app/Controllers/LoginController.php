@@ -1,8 +1,8 @@
 <?php
 // Importer le gestionnaire de vues.
-require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'GestionVue.php';
-require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'FormManager.php';
-require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR . 'userModel.php';
+require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'GestionVue.php';
+require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'FormManager.php';
+require_once dirname(__DIR__) . DS . 'Models' . DS . 'userModel.php';
 
 $args = [];
 
@@ -19,6 +19,10 @@ function getPageInfos(): array
 
 function index(?array $args = []): void
 {
+  if (isConnected()) {
+    header('Location: ' . BASE_URL . '/profile');
+    exit;
+  }
   // Afficher la page de connection.
   showView(getPageInfos(), 'login', $args);
 }
@@ -38,8 +42,8 @@ function loginUser(): void
 
     $user = connectUser($pseudo, $password);
     if ($user) {
-
       header('Location: ' . BASE_URL . '/profile');
+      exit();
     } else {
       $args["errors"]["db"] = "Une erreur s'est produite lors de la connection de votre compte.";
       index($args);

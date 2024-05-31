@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'nav.php';
+require_once __DIR__ . DS . 'nav.php';
 $nav = createNavItems();
 ?>
 
@@ -9,9 +9,9 @@ $nav = createNavItems();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<?= $metaDescription ?? ''  ?>">
+    <meta name="description" content="<?= $pageInfos['description'] ?? ''  ?>">
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/output.css">
-    <title><?= $pageTitle ?? '' ?></title>
+    <title><?= $pageInfos['title'] ?? '' ?></title>
 </head>
 
 <body class="mt-14">

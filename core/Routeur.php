@@ -66,7 +66,7 @@ function startRouter(array $routes, ?array $patterns = []): void
 function lauchController(string $controller, string $action, ?array $urlParams = []): void
 {
     // Charger le contrôleur.
-    require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR . $controller . '.php';
+    require_once dirname(__DIR__) . DS . 'app' . DS . 'Controllers' . DS . $controller . '.php';
 
     // Appeler la fonction adéquate du contrôleur.
     $action(...$urlParams);

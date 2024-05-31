@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'DB.php';
+require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'DB.php';
 
 function getRules()
 {
@@ -100,7 +100,7 @@ function connectUser($pseudo, $password)
   $user = executeQuery($sql, [':pseudo' => $pseudo])->fetch(PDO::FETCH_ASSOC);
 
   if (!empty($user) && password_verify($password, $user['usePassword'])) {
-    $_SESSION['user'] = $user;
+    $_SESSION['user']['id'] = $user['useID'];
     return true;
   } else {
     return false;
@@ -110,4 +110,13 @@ function connectUser($pseudo, $password)
 function disconnectUser()
 {
   session_destroy();
+}
+
+function isConnected()
+{
+  if (!isset($_SESSION['user']['id'])) {
+    return false;
+  } else {
+    return true;
+  }
 }

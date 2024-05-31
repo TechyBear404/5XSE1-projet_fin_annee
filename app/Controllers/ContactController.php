@@ -1,8 +1,8 @@
 <?php
 // Importer le gestionnaire de vues.
-require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'GestionVue.php';
-require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'FormManager.php';
-require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR . 'contactModel.php';
+require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'GestionVue.php';
+require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'FormManager.php';
+require_once dirname(__DIR__) . DS . 'Models' . DS . 'contactModel.php';
 
 $args = [];
 
