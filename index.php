@@ -4,8 +4,18 @@ define('DS', DIRECTORY_SEPARATOR);
 require_once __DIR__ . DS . 'core' . DS . 'Routeur.php';
 require_once __DIR__ . DS . 'core' . DS . 'Session.php';
 
+
+// Permet de distinguer le mode développement du mode production.
+// Ceci me permet d'utiliser des conditions pour réaliser certaines actions seulement si je suis dans un mode spécifique.
+// Par exemple, dans le fichier /core/gestion_bdd.php, les erreurs ne s'afficheront dans le navigateur que si la constante DEV_MODE a été définie et que sa valeur vaut "true".
+define('DEV_MODE', true);
+
 // charger les variables d'environnement
-$env = file_get_contents(__DIR__ . "/.env");
+if (DEV_MODE === true) {
+    $env = file_get_contents(__DIR__ . "/.env.local");
+} elseif (DEV_MODE === false) {
+    $env = file_get_contents(__DIR__ . "/.env");
+}
 $lines = explode("\n", $env);
 
 foreach ($lines as $line) {
@@ -14,11 +24,6 @@ foreach ($lines as $line) {
         putenv(trim($line));
     }
 }
-
-// Permet de distinguer le mode développement du mode production.
-// Ceci me permet d'utiliser des conditions pour réaliser certaines actions seulement si je suis dans un mode spécifique.
-// Par exemple, dans le fichier /core/gestion_bdd.php, les erreurs ne s'afficheront dans le navigateur que si la constante DEV_MODE a été définie et que sa valeur vaut "true".
-define('DEV_MODE', true);
 
 // Chemin de base de l'application (Utile si l'application est hebergée dans un sous-dossier. Dans ce cas, n'oubliez pas d'adapter le fichier .htaccess).
 // Par exemple si votre url racine est le suviant : localhost/monprojet/,

@@ -25,6 +25,7 @@ function sendVerificationMail($to, $token): bool
   }
   $url .= $_SERVER['HTTP_HOST'];
   $activationLink = $url . '/verify/' . $to . '/' . $token;
+  echo $activationLink;
   $message = "<html><body>";
   $message .= '<p>voici votre code de verification: ' . $token . '</p>';
   $message .= '<p>cliquez sur le lien suivant pour activer votre compte: <a href="' . $activationLink . '">Activer mon compte</a></p>';
@@ -35,5 +36,6 @@ function sendVerificationMail($to, $token): bool
     "Content-Type" => "text/html; charset=\"UTF-8\"",
     "Content-Transfer-Encoding" => "quoted-printable"
   ];
+  // return sendMail($to, $subject, $message, implode("\r\n", $headers));
   return sendMail($to, $subject, $message, $headers);
 }
