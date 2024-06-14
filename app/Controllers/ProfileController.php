@@ -65,14 +65,13 @@ function editProfile(?array $args = []): void
     } elseif (isset($_POST["email"]) && !empty($_POST["email"]) && $key === "email") {
       $formRules["rules"][$key] = $value;
     } elseif ((isset($_POST["passwordNew"]) && !empty($_POST["passwordNew"]) && $key === "passwordNew") || (isset($_POST["passwordCurrent"]) && !empty($_POST["passwordCurrent"]) && $key === "passwordCurrent") || (isset($_POST["passwordConfirm"]) && !empty($_POST["passwordConfirm"]) && $key === "passwordConfirm")) {
-      $formRules["rules"]["passwordNew"] = $formEditProfileRules["rules"]["passwordNew"];
       $formRules["rules"]["passwordCurrent"] = $formEditProfileRules["rules"]["passwordCurrent"];
+      $formRules["rules"]["passwordNew"] = $formEditProfileRules["rules"]["passwordNew"];
       $formRules["rules"]["passwordConfirm"] = $formEditProfileRules["rules"]["passwordConfirm"];
       break;
     }
   }
   // Verify the fields.
-
   [$errors, $valeursEchappees] = verifChamps($formRules, $_POST);
   $args["errors"] = $errors;
   $args["valeursEchappees"] = $valeursEchappees;

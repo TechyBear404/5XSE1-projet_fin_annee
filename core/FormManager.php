@@ -46,38 +46,31 @@ function verifChamps($formRulesSettings, $formData)
         $message = str_replace(["%0%"], [$formInputDisplay[$rule]], $formMessages["required"]);
         $errors[$rule] = $message;
         break;
-      }
-      if ($check === "minLength" && strlen($cleanedData) < $value) {
+      } elseif ($check === "minLength" && strlen($cleanedData) < $value) {
         $message = str_replace(["%0%", "%1%"], [$formInputDisplay[$rule], $value], $formMessages["minLength"]);
         $errors[$rule] = $message;
-      }
-      if ($check === "maxLength" && strlen($cleanedData) > $value) {
+      } elseif ($check === "maxLength" && strlen($cleanedData) > $value) {
         $message = str_replace(["%0%", "%1%"], [$formInputDisplay[$rule], $value], $formMessages["maxLength"]);
         $errors[$rule] = $message;
-      }
-      if ($check === "type" && $value === "email") {
+      } elseif ($check === "type" && $value === "email") {
         if (!filter_var($cleanedData, FILTER_VALIDATE_EMAIL)) {
           $message = str_replace(["%0%"], [$formInputDisplay[$rule]], $formMessages["email"]);
           $errors[$rule] = $message;
         }
-      }
-      if ($check === "type" && $value === "passwordCurrent") {
-        if (isUserPassword($cleanedData)) {
+      } elseif ($check === "type" && $value === "passwordCurrent") {
+        if (!isUserPassword($cleanedData)) {
           $errors[$rule] = "Votre mot de passe actuel est incorrect";
         }
-      }
-      if ($check === "type" && ($value === "password" || $value === "passwordNew")) {
+      } elseif ($check === "type" && ($value === "password" || $value === "passwordNew")) {
         // if passworc contain min 8 characters, min 1 uppercase, min 1 lowercase and min 1 number
         if (!preg_match('/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/', $cleanedData)) {
           $errors[$rule] = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial @ $ ! % * ? &";
         }
-      }
-      if ($check === "type" && $value === "passwordConfirm") {
+      } elseif ($check === "type" && $value === "passwordConfirm") {
         if ($cleanedData !== $formData["password"]) {
           $errors[$rule] = "Les mots de passe ne correspondent pas";
         }
-      }
-      if ($check === "unique") {
+      } elseif ($check === "unique") {
         if ($value === "email") {
           if (isEmailUsed($cleanedData)) {
             $errors[$rule] = "L'adresse email est déjà utilisée";

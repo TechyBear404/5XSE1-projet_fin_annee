@@ -45,19 +45,19 @@ $tokenCSRF = generateCSRF();
         <div id="input-password" class="edit-input <?= isset($errors['password']) || isset($errors['passwordCurrent']) || isset($errors['passwordConfirm'])  ? "" : 'hidden' ?>">
           <!-- current password -->
           <label for="passwordCurrent" class="<?= $labelClass ?>">Mot de passe actuel:</label>
-          <input type="password" name="passwordCurrent" class="<?= $inputClass ?> <?= isset($errors['passwordCurrent']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors['passwordCurrent']) ? $valeursEchappees['passwordCurrent'] : null ?>">
+          <input id="input-passwordCurrent" type="password" name="passwordCurrent" class="password <?= $inputClass ?> <?= isset($errors['passwordCurrent']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors['passwordCurrent']) ? $valeursEchappees['passwordCurrent'] : null ?>">
           <?php if (!empty($errors["passwordCurrent"])) { ?>
             <div id="error-passwordCurrent" class="text-red-500"><?= $errors["passwordCurrent"] ?></div>
           <?php } ?>
           <!-- new password -->
           <label for="passwordNew" class="<?= $labelClass ?>">Nouveau mot de passe:</label>
-          <input type="password" name="passwordNew" class="<?= $inputClass ?> <?= isset($errors['password']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors['passwordNew']) ? $valeursEchappees['passwordNew'] : null ?>">
+          <input id="input-passwordNew" type="password" name="passwordNew" class="password <?= $inputClass ?> <?= isset($errors['passwordNew']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors['passwordNew']) ? $valeursEchappees['passwordNew'] : null ?>">
           <?php if (!empty($errors["passwordNew"])) { ?>
             <div id="error-passwordNew" class="text-red-500"><?= $errors["passwordNew"] ?></div>
           <?php } ?>
           <!-- confirm new password -->
           <label for="passwordConfirm" class="<?= $labelClass ?>">Confirmer le mot de passe:</label>
-          <input type="password" name="passwordConfirm" class="<?= $inputClass ?> <?= isset($errors['passwordConfirm']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors['passwordConfirm']) ? $valeursEchappees['passwordConfirm'] : null ?>">
+          <input id="input-passwordConfirm" type="password" name="passwordConfirm" class="password <?= $inputClass ?> <?= isset($errors['passwordConfirm']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors['passwordConfirm']) ? $valeursEchappees['passwordConfirm'] : null ?>">
           <?php if (!empty($errors["passwordConfirm"])) { ?>
             <div id="error-passwordConfirm" class="text-red-500"><?= $errors["passwordConfirm"] ?></div>
           <?php } ?>
@@ -82,7 +82,6 @@ $tokenCSRF = generateCSRF();
     editInputs.forEach((input, index) => {
       if (!input.classList.contains('hidden')) {
         isHidden = false;
-        console.log(isHidden);
       }
     });
     if (isHidden) {
@@ -96,13 +95,23 @@ $tokenCSRF = generateCSRF();
   const clickHandler = (event) => {
     event.preventDefault();
     const editInput = document.getElementById(event.target.parentElement.id.replace('edit-', 'input-'));
+    const passwordInputs = document.querySelectorAll('.password');
     const errorInput = document.getElementById(event.target.parentElement.id.replace('edit-', 'error-'));
     editInput.classList.toggle('hidden');
-    if (editInput.classList.contains('hidden')) {
+    if (editInput.classList.contains('hidden') && event.target.parentElement.id !== 'edit-password') {
       editInput.value = null;
       editInput.classList.remove('ring');
       editInput.classList.remove('ring-red-500');
       errorInput.innerText = null;
+    } else if (editInput.classList.contains('hidden') && event.target.parentElement.id === 'edit-password') {
+      console.log('password');
+      passwordInputs.forEach((input, index) => {
+        const errorPassword = document.getElementById(input.id.replace('input-', 'error-'));
+        input.value = null;
+        input.classList.remove('ring');
+        input.classList.remove('ring-red-500');
+        errorPassword.innerText = null;
+      });
     }
     isHidden();
   }

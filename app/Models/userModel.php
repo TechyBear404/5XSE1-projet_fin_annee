@@ -91,6 +91,10 @@ function getEditProfileRules()
         'type' => 'email',
         'unique' => 'email'
       ],
+      'passwordCurrent' => [
+        'required' => true,
+        'type' => 'passwordCurrent',
+      ],
       'passwordNew' => [
         'required' => true,
         'minLength' => 8,
@@ -100,10 +104,6 @@ function getEditProfileRules()
       'passwordConfirm' => [
         'required' => true,
         'type' => 'passwordConfirm',
-      ],
-      'passwordCurrent' => [
-        'required' => true,
-        'type' => 'passwordCurrent',
       ]
     ],
     'inputNames' => [
