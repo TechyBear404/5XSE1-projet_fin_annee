@@ -2,6 +2,7 @@
 // Importer le routeur d'URL.
 define('DS', DIRECTORY_SEPARATOR);
 require_once __DIR__ . DS . 'core' . DS . 'Routeur.php';
+require_once __DIR__ . DS . 'core' . DS . 'Session.php';
 
 // charger les variables d'environnement
 $env = file_get_contents(__DIR__ . "/.env");
@@ -27,22 +28,13 @@ define('BASE_URL', '');
 // Définir la langue.
 // define('LANGUE', 'fr');
 
-// init session cookie
-$lifeTime = 7 * 24 * 60 * 60;
-
-ini_set('session.use_strict_mode', 1);
-ini_set('session.use_only_cookies', 1);
-session_set_cookie_params([
-    // 'lifetime' => $lifeTime,
-    'path' => '/',
-    'secure' => false,
-    'httponly' => true,
-    'samesite' => 'lax'
-]);
-session_start();
 
 // Routes :
-$patterns = ['id' => '\d+'];
+// $patterns = ['id' => '\d+'];
+$patterns = [
+    'email' => '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}',
+    'token' => '[a-zA-Z0-9]+'
+];
 
 $routes = [
     getRoute('GET', '/', 'AccueilController', 'index'),
@@ -51,10 +43,13 @@ $routes = [
     getRoute('POST', '/login', 'LoginController', 'loginUser'),
     getRoute('GET', '/register', 'RegisterController', 'index'),
     getRoute('POST', '/register', 'RegisterController', 'createUser'),
+    // create route to verify email
+    getRoute('GET', '/verify/{email}/{token}', 'RegisterController', 'verifyEmail'),
     getRoute('GET', '/contact', 'ContactController', 'index'),
     getRoute('POST', '/contact', 'ContactController', 'sendContactRequest'),
     getRoute('GET', '/profile', 'ProfileController', 'index'),
     getRoute('GET', '/logout', 'ProfileController', 'logout'),
+    getRoute('POST', '/profile', 'ProfileController', 'editProfile'),
 
 ];
 

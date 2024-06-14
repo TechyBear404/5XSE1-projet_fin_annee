@@ -3,6 +3,7 @@
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'GestionVue.php';
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'FormManager.php';
 require_once dirname(__DIR__) . DS . 'Models' . DS . 'userModel.php';
+// require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'Session.php';
 
 $args = [];
 
@@ -21,7 +22,7 @@ function index(?array $args = []): void
 {
   if (isConnected()) {
     header('Location: ' . BASE_URL . '/profile');
-    exit;
+    exit();
   }
   // Afficher la page de connection.
   showView(getPageInfos(), 'login', $args);
@@ -29,24 +30,35 @@ function index(?array $args = []): void
 
 function loginUser(): void
 {
-  // $args = [];
-  $formRules = getRules();
+  $formRules = getLoginRules();
+
+  // check if the tokenCSRF is valid
+  if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"])) {
+    $args["errors"]["tokenCSRF"] = "Une erreur s'est produite lors de la soumission du formulaire.";
+    index($args);
+    exit();
+  } else {
+    // remove "tokenCSRF" from the array $_POST if it's valid
+    unset($_POST["tokenCSRF"]);
+  }
+
   [$errors, $valeursEchappees] = verifChamps($formRules, $_POST);
   $args["errors"] = $errors;
   $args["valeursEchappees"] = $valeursEchappees;
-  // echo '<pre>' . print_r($args, true) . '</pre>';
-  // Appeler la vue.
+  // Call Vue.
   if (empty($errors)) {
     $pseudo = $valeursEchappees["pseudo"];
     $password = $valeursEchappees["password"];
 
     $user = connectUser($pseudo, $password);
-    if ($user) {
+
+    if (isset($user["success"])) {
       header('Location: ' . BASE_URL . '/profile');
       exit();
-    } else {
-      $args["errors"]["db"] = "Une erreur s'est produite lors de la connection de votre compte.";
+    } elseif (isset($user["error"])) {
+      $args["errors"] = $user["error"];
       index($args);
+      exit();
     }
   } else {
     index($args);

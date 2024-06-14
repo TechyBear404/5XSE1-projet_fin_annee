@@ -29,7 +29,7 @@ function executeQuery(string $sql, ?array $params = null)
       return $db->query($sql);
     }
   } catch (PDOException $e) {
-    // echo 'Erreur : ' . $e->getMessage();
+    echo 'Erreur : ' . $e->getMessage();
     return $e->getMessage();
   }
 }

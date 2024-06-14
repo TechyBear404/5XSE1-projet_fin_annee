@@ -22,47 +22,6 @@ function error($errors)
   return $error;
 }
 
-// function inputElem($tag, $type, $id, $name, $isError, $escapedValue)
-// {
-//   $inputValue = $escapedValue != null ? $escapedValue : '';
-//   $errorElem = !$isError ?  ' aria-invalid="false">' : ' class="is-invalid" aria-invalid="true">';
-//   if ($tag === "input") {
-//     return '<input type="' . $type .  'id="' . $id . '" name="' . $name . '" value="' . $inputValue . '"' . $errorElem;
-//   } else if ($tag === "textarea") {
-//     return '<textarea id="' . $id . '" name="' . $name . '"' . $errorElem . $inputValue . '</textarea>';
-//   }
-// }
-
-// $formRules = [
-//   'nom' => [
-//     'requis' => true,
-//     'minLength' => 2,
-//     'maxLength' => 255,
-//   ],
-//   'prenom' => [
-//     'minLength' => 2,
-//     'maxLength' => 255,
-//   ],
-//   'email' => [
-//     'requis' => true,
-//     'type' => "email",
-//   ],
-//   'message' => [
-//     'requis' => true,
-//     'minLength' => 10,
-//     'maxLength' => 3000,
-//   ],
-// ];
-
-// $formMessages = [
-//   "requis" => "Le champ %0% est requis",
-//   "email" => "Veuillez entrer une adresse mail valide",
-//   "minLength" => "Le champ %0% doit contenir au moins %1% caractères",
-//   "maxLength" => "Le champ %0% doit contenir au maximum %1% caractères",
-//   "envoiEchec" => "le formulaire n'a pas été envoyé!",
-//   "envoiSucces" => "le formulaire a bien été envoyé!"
-// ];
-
 
 function verifChamps($formRulesSettings, $formData)
 {
@@ -74,43 +33,113 @@ function verifChamps($formRulesSettings, $formData)
   $errors = [];
   $valeursEchappees = [];
 
-  foreach ($formData as $input => $value) {
-    $cleanedData = cleanInput($value);
-    $valeursEchappees[$input] = $cleanedData;
+  foreach ($formRules as $rule => $checks) {
+    if (!isset($formData[$rule])) {
+      $errors[$rule] = "Une erreur s'est produite lors de la soumission du formulaire.";
+      break;
+    }
+    $cleanedData = cleanInput($formData[$rule]);
+    $valeursEchappees[$rule] = $cleanedData;
 
-    foreach ($formRules[$input] as $rule => $value) {
-      if ($rule === "requis" && (empty($cleanedData) || $cleanedData === "")) {
-        $message = str_replace(["%0%"], [$formInputDisplay[$input]], $formMessages["requis"]);
-        $errors[$input] = $message;
+    foreach ($checks as $check => $value) {
+      if ($check === "required" && $value === true && (empty($cleanedData) || $cleanedData === "")) {
+        $message = str_replace(["%0%"], [$formInputDisplay[$rule]], $formMessages["required"]);
+        $errors[$rule] = $message;
         break;
       }
-      if ($rule === "minLength" && strlen($cleanedData) < $value) {
-        $message = str_replace(["%0%", "%1%"], [$formInputDisplay[$input], $value], $formMessages["minLength"]);
-        $errors[$input] = $message;
+      if ($check === "minLength" && strlen($cleanedData) < $value) {
+        $message = str_replace(["%0%", "%1%"], [$formInputDisplay[$rule], $value], $formMessages["minLength"]);
+        $errors[$rule] = $message;
       }
-      if ($rule === "maxLength" && strlen($cleanedData) > $value) {
-        $message = str_replace(["%0%", "%1%"], [$formInputDisplay[$input], $value], $formMessages["maxLength"]);
-        $errors[$input] = $message;
+      if ($check === "maxLength" && strlen($cleanedData) > $value) {
+        $message = str_replace(["%0%", "%1%"], [$formInputDisplay[$rule], $value], $formMessages["maxLength"]);
+        $errors[$rule] = $message;
       }
-      if ($rule === "type" && $value === "email") {
+      if ($check === "type" && $value === "email") {
         if (!filter_var($cleanedData, FILTER_VALIDATE_EMAIL)) {
-          $message = str_replace(["%0%"], [$formInputDisplay[$input]], $formMessages["email"]);
-          $errors[$input] = $message;
+          $message = str_replace(["%0%"], [$formInputDisplay[$rule]], $formMessages["email"]);
+          $errors[$rule] = $message;
         }
       }
-      if ($rule === "type" && $value === "password") {
-        if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/", $cleanedData)) {
-          $errors[$input] = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre";
+      if ($check === "type" && $value === "passwordCurrent") {
+        if (isUserPassword($cleanedData)) {
+          $errors[$rule] = "Votre mot de passe actuel est incorrect";
         }
       }
-      if ($rule === "type" && $value === "passwordConfirm") {
-
+      if ($check === "type" && ($value === "password" || $value === "passwordNew")) {
+        // if passworc contain min 8 characters, min 1 uppercase, min 1 lowercase and min 1 number
+        if (!preg_match('/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/', $cleanedData)) {
+          $errors[$rule] = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial @ $ ! % * ? &";
+        }
+      }
+      if ($check === "type" && $value === "passwordConfirm") {
         if ($cleanedData !== $formData["password"]) {
-          $errors[$input] = "Les mots de passe ne correspondent pas";
+          $errors[$rule] = "Les mots de passe ne correspondent pas";
+        }
+      }
+      if ($check === "unique") {
+        if ($value === "email") {
+          if (isEmailUsed($cleanedData)) {
+            $errors[$rule] = "L'adresse email est déjà utilisée";
+          }
+        } elseif ($value === "user") {
+          if (isPseudoUsed($cleanedData)) {
+            $errors[$rule] = "Le pseudo est déjà utilisé";
+          }
         }
       }
     }
   }
+
+  // foreach ($formData as $input => $value) {
+  // $cleanedData = cleanInput($value);
+  // $valeursEchappees[$input] = $cleanedData;
+
+  //   foreach ($formRules[$input] as $rule => $value) {
+  //     if ($rule === "type" && $value === "tokenCSRF") {
+  //       echo '<pre>' . print_r($cleanedData, true) . '</pre>';
+  //       if (!checkCSRF($cleanedData)) {
+  //         $errors[$input] = "Une erreur s'est produite lors de la soumission du formulaire.";
+  //         exit();
+  //       }
+  //     }
+  //     if ($rule === "requis" && (empty($cleanedData) || $cleanedData === "")) {
+  //       $message = str_replace(["%0%"], [$formInputDisplay[$input]], $formMessages["requis"]);
+  //       $errors[$input] = $message;
+  //       break;
+  //     }
+  //     if ($rule === "minLength" && strlen($cleanedData) < $value) {
+  //       $message = str_replace(["%0%", "%1%"], [$formInputDisplay[$input], $value], $formMessages["minLength"]);
+  //       $errors[$input] = $message;
+  //     }
+  //     if ($rule === "maxLength" && strlen($cleanedData) > $value) {
+  //       $message = str_replace(["%0%", "%1%"], [$formInputDisplay[$input], $value], $formMessages["maxLength"]);
+  //       $errors[$input] = $message;
+  //     }
+  //     if ($rule === "type" && $value === "email") {
+  //       if (!filter_var($cleanedData, FILTER_VALIDATE_EMAIL)) {
+  //         $message = str_replace(["%0%"], [$formInputDisplay[$input]], $formMessages["email"]);
+  //         $errors[$input] = $message;
+  //       }
+  //     }
+  //     if ($rule === "type" && $value === "password") {
+  //       // if passworc contain at least 8 characters, one uppercase, one lowercase and one number
+  //       if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\x21-\x7E]{8,}$/", $cleanedData)) {
+  //         $errors[$input] = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial";
+  //       }
+  //     }
+  //     if ($rule === "type" && $value === "passwordConfirm") {
+  //       if ($cleanedData !== $formData["password"]) {
+  //         $errors[$input] = "Les mots de passe ne correspondent pas";
+  //       }
+  //     }
+  //     if ($rule === "type" && $value === "passwordCurrent") {
+  //       if (isUserPassword($cleanedData)) {
+  //         $errors[$input] = "Les mots de passe ne correspondent pas";
+  //       }
+  //     }
+  //   }
+  // }
   return [$errors, $valeursEchappees];
 }
 

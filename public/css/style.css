@@ -73,7 +73,6 @@ header nav ul li a.active {
   color: hsl(207, 80%, 100%);
   /* text-shadow: var(--shadow-text); */
 }
-
 header nav ul li a {
   /* font-weight: bold;
   text-transform: uppercase; */
@@ -108,55 +107,55 @@ main {
   margin: auto;
 } */
 
-#contact-form,
-#login-form,
-#register-form {
+/* #contact-form,
+#login-form, */
+/* #register-form {
   margin: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
+} */
 
-#contact-form input.is-invalid,
+/* #contact-form input.is-invalid,
 #register-form input.is-invalid,
 #contact-form textarea.is-invalid {
   border: 1px solid red;
-}
+} */
 
-#contact-form label,
+/* #contact-form label,
 #register-form label,
 #login-form label {
   grid-area: label;
-}
+} */
 
-#contact-form input,
+/* #contact-form input,
 #contact-form textarea,
 #register-form input,
 #login-form input {
   grid-area: input;
   color: black;
   @apply p-1 rounded-md;
-}
+} */
 
-#contact-form .error,
+/* #contact-form .error,
 #register-form .error,
 #login-form .error {
   grid-area: error;
-}
+} */
 
-#contact-form button[type="submit"],
+/* #contact-form button[type="submit"],
 #register-form button[type="submit"],
 #login-form button[type="submit"] {
   margin: 2rem auto;
-}
+} */
 
-#contact-form .error,
+/* #contact-form .error,
 #register-form .error,
 #login-form .error {
   color: red;
   font-size: 0.8rem;
   margin: 0.5rem 0px;
-}
+} */
 
 footer {
   background-color: var(--blue-02);
