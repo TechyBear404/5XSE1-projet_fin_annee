@@ -42,16 +42,20 @@ function loginUser(): void
     unset($_POST["tokenCSRF"]);
   }
 
+  // if ($_POST["type"] === "activation") {
+  //   reActivateUser()
+  //   index($args);
+  //   exit();
+  // }
   [$errors, $valeursEchappees] = verifChamps($formRules, $_POST);
   $args["errors"] = $errors;
   $args["valeursEchappees"] = $valeursEchappees;
   // Call Vue.
   if (empty($errors)) {
-    $pseudo = $valeursEchappees["pseudo"];
+    $email = $valeursEchappees["email"];
     $password = $valeursEchappees["password"];
 
-    $user = connectUser($pseudo, $password);
-
+    $user = connectUser($email, $password);
     if (isset($user["success"])) {
       header('Location: ' . BASE_URL . '/profile');
       exit();

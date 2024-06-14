@@ -1,12 +1,13 @@
 <?php
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'DB.php';
+require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'Mail.php';
 
 
 function getLoginRules()
 {
   return [
     "rules" => [
-      'pseudo' => [
+      'email' => [
         'required' => true,
         'minLength' => 2,
         'maxLength' => 255,
@@ -197,32 +198,34 @@ function isEmailUsed($email)
   }
 }
 
-function updateUser(int $id, ?string $pseudo = null, ?string $email = null, ?string $password = null)
+// function updateUser(int $id, ?string $pseudo = null, ?string $email = null, ?string $password = null)
+function updateUser($user)
 {
   $table = getTable();
   $fields = "";
-  $fieldsValues = ['id' => $id];
-  if ($pseudo) {
+  $fieldsValues = ['id' => $user['id']];
+  if ($user['pseudo']) {
     if ($fields !== "") {
       $fields .= ", ";
     }
     $fields .= "usePseudo = :pseudo";
-    $fieldsValues[':pseudo'] = $pseudo;
+    $fieldsValues[':pseudo'] = $user['pseudo'];
   }
-  if ($email) {
+  if ($user['email']) {
     if ($fields !== "") {
       $fields .= ", ";
     }
     $fields .= "useEmail = :email";
-    $fieldsValues[':email'] = $email;
+    $fieldsValues[':email'] = $user['email'];
   }
-  if ($password) {
+  if ($user['password']) {
     if ($fields !== "") {
       $fields .= ", ";
     }
     $fields .= "usePassword = :password";
-    $fieldsValues[':password'] = password_hash($password, PASSWORD_DEFAULT);
+    $fieldsValues[':password'] = password_hash($user['password'], PASSWORD_DEFAULT);
   }
+
   $sql = "UPDATE $table SET $fields WHERE useID = :id";
 
   return executeQuery($sql, $fieldsValues);
@@ -235,14 +238,13 @@ function deleteUser(int $id)
   return executeQuery($sql, [':id' => $id]);
 }
 
-function connectUser($pseudo, $password)
+function connectUser($email, $password)
 {
   $table = getTable();
-  $sql = "SELECT * FROM $table WHERE usePseudo = :pseudo";
-  $user = executeQuery($sql, [':pseudo' => $pseudo])->fetch(PDO::FETCH_ASSOC);
-
+  $sql = "SELECT * FROM $table WHERE useEmail = :email";
+  $user = executeQuery($sql, [':email' => $email])->fetch(PDO::FETCH_ASSOC);
   if (empty($user)) {
-    return ['error' => ['pseudo' => 'Pseudo incorrect']];
+    return ['error' => ['email' => 'Email incorrect']];
   } else if (!password_verify($password, $user['usePassword'])) {
     return ['error' => ['password' => 'Mot de passe incorrect']];
   } else if ($user['useActivated'] == 0) {
@@ -279,4 +281,12 @@ function isUserPassword($password)
   } else {
     return false;
   }
+}
+
+function reActivateUser($pseudo, $validationToken)
+{
+  $table = getTable();
+  $sql = "UPDATE $table SET useActivationToken = :activationToken WHERE usePseudo = :pseudo";
+  $user = executeQuery($sql, [':activationToken' => $validationToken, ':pseudo' => $pseudo]);
+  return $user;
 }

@@ -67,7 +67,7 @@ function verifChamps($formRulesSettings, $formData)
           $errors[$rule] = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial @ $ ! % * ? &";
         }
       } elseif ($check === "type" && $value === "passwordConfirm") {
-        if ($cleanedData !== $formData["password"]) {
+        if ((isset($formData["password"]) && $cleanedData !== $formData["password"]) || (isset($formData["passwordNew"]) && $cleanedData !== $formData["passwordNew"])) {
           $errors[$rule] = "Les mots de passe ne correspondent pas";
         }
       } elseif ($check === "unique") {

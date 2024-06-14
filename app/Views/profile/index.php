@@ -4,6 +4,14 @@ $editButtonClass = "edit-button  hover:text-orange-700 font-bold rounded";
 $inputErrorClass = "ring ring-red-500";
 $labelClass = "mb-1 font-semibold";
 $tokenCSRF = generateCSRF();
+
+function isPasswordErrors($errors)
+{
+  if (isset($errors['passwordCurrent']) || isset($errors['passwordNew']) || isset($errors['passwordConfirm'])) {
+    return true;
+  }
+  return false;
+}
 ?>
 
 <div>
@@ -45,19 +53,19 @@ $tokenCSRF = generateCSRF();
         <div id="input-password" class="edit-input <?= isset($errors['password']) || isset($errors['passwordCurrent']) || isset($errors['passwordConfirm'])  ? "" : 'hidden' ?>">
           <!-- current password -->
           <label for="passwordCurrent" class="<?= $labelClass ?>">Mot de passe actuel:</label>
-          <input id="input-passwordCurrent" type="password" name="passwordCurrent" class="password <?= $inputClass ?> <?= isset($errors['passwordCurrent']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors['passwordCurrent']) ? $valeursEchappees['passwordCurrent'] : null ?>">
+          <input id="input-passwordCurrent" type="password" name="passwordCurrent" class="password <?= $inputClass ?> <?= isset($errors['passwordCurrent']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors) && isPasswordErrors($errors) ? $valeursEchappees['passwordCurrent'] : null ?>">
           <?php if (!empty($errors["passwordCurrent"])) { ?>
             <div id="error-passwordCurrent" class="text-red-500"><?= $errors["passwordCurrent"] ?></div>
           <?php } ?>
           <!-- new password -->
           <label for="passwordNew" class="<?= $labelClass ?>">Nouveau mot de passe:</label>
-          <input id="input-passwordNew" type="password" name="passwordNew" class="password <?= $inputClass ?> <?= isset($errors['passwordNew']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors['passwordNew']) ? $valeursEchappees['passwordNew'] : null ?>">
+          <input id="input-passwordNew" type="password" name="passwordNew" class="password <?= $inputClass ?> <?= isset($errors['passwordNew']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors) && isPasswordErrors($errors) ? $valeursEchappees['passwordNew'] : null ?>">
           <?php if (!empty($errors["passwordNew"])) { ?>
             <div id="error-passwordNew" class="text-red-500"><?= $errors["passwordNew"] ?></div>
           <?php } ?>
           <!-- confirm new password -->
           <label for="passwordConfirm" class="<?= $labelClass ?>">Confirmer le mot de passe:</label>
-          <input id="input-passwordConfirm" type="password" name="passwordConfirm" class="password <?= $inputClass ?> <?= isset($errors['passwordConfirm']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors['passwordConfirm']) ? $valeursEchappees['passwordConfirm'] : null ?>">
+          <input id="input-passwordConfirm" type="password" name="passwordConfirm" class="password <?= $inputClass ?> <?= isset($errors['passwordConfirm']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors) && isPasswordErrors($errors) ? $valeursEchappees['passwordConfirm'] : null ?>">
           <?php if (!empty($errors["passwordConfirm"])) { ?>
             <div id="error-passwordConfirm" class="text-red-500"><?= $errors["passwordConfirm"] ?></div>
           <?php } ?>

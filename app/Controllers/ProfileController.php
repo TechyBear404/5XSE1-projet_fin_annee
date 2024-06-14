@@ -78,12 +78,18 @@ function editProfile(?array $args = []): void
 
   // Appeler la vue.
   if (empty($errors) && !empty($valeursEchappees)) {
-    $id = $_SESSION['user']['id'];
-    $pseudo = $valeursEchappees["pseudo"] ?? null;
-    $email = $valeursEchappees["email"] ?? null;
-    $password = $valeursEchappees["passwordNew"] ?? null;
+    $user = [
+      "id" => $_SESSION['user']['id'],
+      "pseudo" => $valeursEchappees["pseudo"] ?? null,
+      "email" => $valeursEchappees["email"] ?? null,
+      "password" => $valeursEchappees["passwordNew"] ?? null
+    ];
+    // $id = $_SESSION['user']['id'];
+    // $pseudo = $valeursEchappees["pseudo"] ?? null;
+    // $email = $valeursEchappees["email"] ?? null;
+    // $password = $valeursEchappees["passwordNew"] ?? null;
 
-    $updatedUser = updateUser($id, $pseudo, $email, $password);
+    $updatedUser = updateUser($user);
     if ($updatedUser) {
       $args = [];
       $args["success"] = "Votre compte a été edité avec succès.";
