@@ -48,7 +48,12 @@ function createPost($title, $content)
   $sql = "INSERT INTO $table (postTitle, postContent, postUserID) VALUES (:title, :content, :userId)";
 
   // Execute the query with prepared statements
-  return executeQuery($sql, [':title' => $title, ':content' => $content, ':userId' => $_SESSION['user']['id']]);
+  $response =  executeQuery($sql, [':title' => $title, ':content' => $content, ':userId' => $_SESSION['user']['id']]);
+  if ($response->rowCount() === 0) {
+    return ['error' => 'Le post n\'a pas été créé'];
+  } else {
+    return ['success' => 'Le post a été créé'];
+  }
 }
 
 // Function to get all posts
@@ -88,7 +93,14 @@ function removePost($postID)
   $sql = "DELETE FROM $table WHERE postID = :postID";
 
   // Execute the query with prepared statements
-  return executeQuery($sql, [':postID' => $postID]);
+
+  // return executeQuery($sql, [':postID' => $postID]);
+  $response = executeQuery($sql, [':postID' => $postID]);
+  if ($response->rowCount() === 0) {
+    return ['error' => 'Le post n\'a pas été supprimé'];
+  } else {
+    return ['success' => 'Le post a été supprimé'];
+  }
 }
 
 // Function to edit a post's content
@@ -106,5 +118,10 @@ function editPostContent($postID, $content)
   $sql = "UPDATE $table SET postContent = :content WHERE postID = :postID AND postUserID = :userId";
 
   // Execute the query with prepared statements
-  return executeQuery($sql, [':content' => $content, ':postID' => $postID, ':userId' => $_SESSION['user']['id']]);
+  $response = executeQuery($sql, [':content' => $content, ':postID' => $postID, ':userId' => $_SESSION['user']['id']]);
+  if ($response->rowCount() === 0) {
+    return ['error' => 'Le post n\'a pas été édité'];
+  } else {
+    return ['success' => 'Le post a été édité'];
+  }
 }

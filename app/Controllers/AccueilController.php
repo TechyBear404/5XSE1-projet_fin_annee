@@ -50,11 +50,17 @@ function newPost(): void
 
     if (empty($errors)) {
         // Create a new post
-        $post = createPost($args["valeursEchappees"]['title'], $args["valeursEchappees"]['content']);
-        if (isset($post["error"])) {
-            $args["errors"]["post"] = "Une erreur s'est produite lors de la création du post.";
-        } elseif (isset($post["error"])) {
+        if (!isset($_SESSION['user'])) {
+            $args["errors"]["post"] = "Vous devez être connecté pour créer un post.";
+            index($args);
+            exit();
+        }
+        try {
+            createPost($args["valeursEchappees"]['title'], $args["valeursEchappees"]['content']);
+            $args = [];
             $args["success"]["post"] = "Le post a été créé avec succès.";
+        } catch (Exception $e) {
+            $args["errors"]["post"] = "Une erreur s'est produite lors de la création du post.";
         }
         index($args);
     } else {
@@ -81,7 +87,8 @@ function deletePost(): void
 
     if (isset($post["error"])) {
         $args["errors"]["post"] = "Une erreur s'est produite lors de la suppression du post.";
-    } elseif (isset($post["error"])) {
+    } else {
+        $args = [];
         $args["success"]["post"] = "Le post a été supprimé avec succès.";
     }
 
