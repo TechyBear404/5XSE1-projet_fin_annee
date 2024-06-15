@@ -64,36 +64,13 @@ function createUser(): void
       // echo '<pre>' . print_r($newUser, true) . '</pre>';
       sendVerificationMail($email, $validationToken);
       $args = [];
-      $args["success"]["created"] = "Votre compte a été créé avec succès. Veuillez vérifier votre adresse email pour activer votre compte.";
+      $args["success"]["registration"] = "Votre compte a été créé avec succès. Veuillez vérifier votre adresse email pour activer votre compte.";
     } else {
-      $args["errors"]["db"] = "Une erreur s'est produite lors de la création de votre compte.";
+      $args["errors"]["registration"] = "Une erreur s'est produite lors de la création de votre compte.";
     }
     // echo '<pre>' . print_r($newUser, true) . '</pre>';
     index($args);
   } else {
     index($args);
   }
-}
-
-function verifyEmail(string $email, string $token): void
-{
-  $user = getUserByEmail($email);
-  if ($user) {
-    if ($user["useActivationToken"] === $token) {
-      activateUser($user["useID"]);
-      // if ($verifiedUser) {
-      $args["success"]["verified"] = "Votre compte a été vérifié avec succès.";
-      // wait 1 second before redirecting to login page
-      sleep(2);
-      header('Location: ' . BASE_URL . DS . 'login');
-      // } else {
-      //   $args["errors"]["db"] = "Une erreur s'est produite lors de la vérification de votre compte.";
-      // }
-    } else {
-      $args["errors"]["token"] = "Le token de validation est incorrect.";
-    }
-  } else {
-    $args["errors"]["email"] = "L'adresse email est incorrecte.";
-  }
-  index($args);
 }

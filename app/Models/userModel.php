@@ -248,7 +248,7 @@ function connectUser($email, $password)
   } else if (!password_verify($password, $user['usePassword'])) {
     return ['error' => ['password' => 'Mot de passe incorrect']];
   } else if ($user['useActivated'] == 0) {
-    return ['error' => ['activation' => 'Compte non activé']];
+    return ['error' => ['activation' => 'Compte non activé, veuillez vérifier votre boîte mail']];
   } elseif (!empty($user) && password_verify($password, $user['usePassword']) && $user['useActivated'] == 1) {
     $_SESSION['user']['id'] = $user['useID'];
     return ['success' => 'Connexion réussie'];

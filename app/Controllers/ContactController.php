@@ -3,6 +3,7 @@
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'GestionVue.php';
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'FormManager.php';
 require_once dirname(__DIR__) . DS . 'Models' . DS . 'contactModel.php';
+require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'Mail.php';
 
 $args = [];
 
@@ -24,12 +25,6 @@ function index(?array $args = []): void
   showView(getPageInfos(), 'contact', $args);
 }
 
-// function creer(?array $args = []): void
-// {
-//   // Appeler la vue.
-//   showView(getPageInfos(), 'creer', $args);
-// }
-
 function sendContactRequest(): void
 {
   // $args = [];
@@ -39,26 +34,27 @@ function sendContactRequest(): void
   $args["errors"] = $errors;
   $args["valeursEchappees"] = $valeursEchappees;
 
-  // Appeler la vue.
-  index($args);
-}
+  // Si des erreurs sont survenues, on les affiche.
+  if (empty($errors)) {
+
+    $destinataire = "ector.seb@gmail.com";
+    $sujet = "Demande Renseignements";
+    $message = "<html><body>";
+    $message .= "<p> Nom: " . $valeursEchappees["nom"] . " Prénom: " . $valeursEchappees["prenom"] . "</p>";
+    $message .= "<p>adresse de contact: " . $valeursEchappees["email"] . "</p>";
+    $message .= "<p>Message: " . $valeursEchappees["message"] . "</p>";
+    $message .= "</body></html>";
 
 
-function sendMail($valeursEchappees)
-{
-  $destinataire = "ector.seb@gmail.com";
-  $sujet = "Demande Renseignements";
-  $message = "<html><body>";
-  $message .= "<p> Nom: " . $valeursEchappees["nom"] . " Prénom: " . $valeursEchappees["prenom"] . "</p>";
-  $message .= "<p>adresse de contact: " . $valeursEchappees["email"] . "</p>";
-  $message .= "<p>Message: " . $valeursEchappees["message"] . "</p>";
-  $message .= "</body></html>";
-
-
-  // Tentative d'envoi du mail (retourne "true" en cas de réussite et "false" en cas d'echec).
-  if (mail($destinataire, $sujet, $message)) {
-    echo "Le courriel a été envoyé avec succès.";
+    // Tentative d'envoi du mail (retourne "true" en cas de réussite et "false" en cas d'echec).
+    $args = [];
+    if (sendMail($destinataire, $sujet, $message)) {
+      $args["message"]["success"] = "Le courriel a été envoyé avec succès.";
+    } else {
+      $args["message"]["error"] = "Une erreur est survenue lors de l'envoi du courriel.";
+    }
+    index($args);
   } else {
-    echo "L'envoi du courriel a échoué.";
+    index($args);
   }
 };

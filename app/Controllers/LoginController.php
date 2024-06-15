@@ -57,7 +57,8 @@ function loginUser(): void
 
     $user = connectUser($email, $password);
     if (isset($user["success"])) {
-      header('Location: ' . BASE_URL . '/profile');
+
+      header('Location: ' . BASE_URL . '/' . 'profile');
       exit();
     } elseif (isset($user["error"])) {
       $args["errors"] = $user["error"];
@@ -67,4 +68,24 @@ function loginUser(): void
   } else {
     index($args);
   }
+}
+
+function verifyEmail(string $email, string $token): void
+{
+  $user = getUserByEmail($email);
+  if ($user) {
+    if ($user["useActivationToken"] === $token) {
+      activateUser($user["useID"]);
+      $args["success"] = "Votre compte a été vérifié avec succès.";
+      // wait 1 second before redirecting to login page
+      // } else {
+      //   $args["errors"]["db"] = "Une erreur s'est produite lors de la vérification de votre compte.";
+      // }
+    } else {
+      $args["errors"]["token"] = "Le token de validation est incorrect.";
+    }
+  } else {
+    $args["errors"]["email"] = "L'adresse email est incorrecte.";
+  }
+  index($args);
 }

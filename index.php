@@ -43,18 +43,19 @@ $patterns = [
 
 $routes = [
     getRoute('GET', '/', 'AccueilController', 'index'),
-    // create routes for authetication page login register
+    getRoute('POST', '/', 'AccueilController', 'newPost'),
     getRoute('GET', '/login', 'LoginController', 'index'),
+    getRoute('GET', '/verify/{email}/{token}', 'LoginController', 'verifyEmail'),
     getRoute('POST', '/login', 'LoginController', 'loginUser'),
     getRoute('GET', '/register', 'RegisterController', 'index'),
     getRoute('POST', '/register', 'RegisterController', 'createUser'),
-    // create route to verify email
-    getRoute('GET', '/verify/{email}/{token}', 'RegisterController', 'verifyEmail'),
     getRoute('GET', '/contact', 'ContactController', 'index'),
     getRoute('POST', '/contact', 'ContactController', 'sendContactRequest'),
     getRoute('GET', '/profile', 'ProfileController', 'index'),
     getRoute('GET', '/logout', 'ProfileController', 'logout'),
     getRoute('POST', '/profile', 'ProfileController', 'editProfile'),
+    getRoute('POST', '/post/delete', 'AccueilController', 'deletePost'),
+    getRoute('POST', '/post/edit', 'AccueilController', 'editPost'),
 
 ];
 

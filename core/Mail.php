@@ -25,9 +25,10 @@ function sendVerificationMail($to, $token): bool
   }
   $url .= $_SERVER['HTTP_HOST'];
   $activationLink = $url . '/verify/' . $to . '/' . $token;
-  echo $activationLink;
+
   $message = "<html><body>";
-  $message .= '<p>voici votre code de verification: ' . $token . '</p>';
+  $message .= '<h1>Verification de votre compte</h1>';
+  $message .= "<p>Bonjour $to</p>";
   $message .= '<p>cliquez sur le lien suivant pour activer votre compte: <a href="' . $activationLink . '">Activer mon compte</a></p>';
   $message .= "</body></html>";
   $headers = [

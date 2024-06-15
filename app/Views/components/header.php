@@ -15,12 +15,11 @@ $nav = createNavItems();
     <title><?= $pageInfos['title'] ?? '' ?></title>
 </head>
 
-<body class="mt-14">
-    <header class="h-12 fixed top-0 w-full bg-slate-950">
-        <nav class="w-full h-full">
-            <ul class="flex gap-6 justify-center items-center h-full font-bold uppercase">
+<body class=" min-w-[400px] h-screen">
+    <header class="sticky top-0 w-full bg-slate-950 z-50">
+        <nav class="w-full py-2">
+            <ul class="md:flex gap-6 justify-center items-center font-bold uppercase text-center">
                 <?= $nav ?>
             </ul>
         </nav>
     </header>
-    <main class="mt-10">

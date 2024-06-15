@@ -15,6 +15,17 @@ function db(): ?PDO
 
 function executeQuery(string $sql, ?array $params = null)
 {
+  // save the time of the last request in a session variable delta_time to prevent multiple requests in a short time
+  // if (!isset($_SESSION['delta_time'])) {
+  //   $_SESSION['delta_time'] = time();
+  // } else {
+  //   $deltaTime = time() - $_SESSION['delta_time'];
+  //   $_SESSION['delta_time'] = time();
+  //   if (isset($deltaTime) && $deltaTime < 1) {
+  //     return "Too many requests in a short time";
+  //   }
+  // }
+
   // echo "<pre> print_r($sql)</pre>";
   $db = db();
   try {

@@ -1,9 +1,111 @@
-<div class="content">
-  <article>
-    <h2 class="text-4xl text-center mb-6">Bienvenue sur votre site web !</h2>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate odit ratione nemo eos excepturi, sapiente blanditiis earum laboriosam maxime exercitationem facilis, odio deserunt, eaque dicta. Quas vitae iste voluptatem error nobis amet velit eligendi nulla cum rem omnis mollitia sunt ipsam odio, ullam architecto voluptas assumenda dolorum? Repudiandae alias impedit ea exercitationem hic inventore saepe perspiciatis animi quas optio. At amet expedita veniam architecto ullam error, maxime, illo doloremque ut nulla totam animi voluptatibus sint. Vitae dolores, dolorum reprehenderit enim doloremque tempore, fugiat hic necessitatibus rerum soluta animi magnam dolore aliquam, illo id aliquid nemo autem! Non, corrupti ipsum veniam repellat aspernatur quidem harum asperiores nobis adipisci quae aperiam facere ut eius nesciunt quasi commodi ab ullam impedit fuga neque recusandae molestias omnis? Corporis illo non ipsa. Illo, culpa ullam ab atque omnis, voluptates dignissimos consequuntur quaerat aut temporibus nisi sit. Totam assumenda repudiandae, cupiditate modi placeat facere tempora voluptates labore ipsum impedit tempore at suscipit recusandae molestiae laudantium, quaerat itaque eius a magnam iste voluptate dolore qui architecto. Eum impedit illo dolores reiciendis molestias ullam aspernatur, ut nesciunt voluptate placeat! Autem sint et dignissimos. Quidem quibusdam blanditiis adipisci deleniti officia, neque iste commodi corporis rem sed voluptates eum ad ab similique. Minima ex nobis et neque autem pariatur error quas. Repellendus, voluptate adipisci aliquid quas et fugit, natus quo odit reprehenderit maiores recusandae dignissimos. Aut ratione aperiam illum numquam enim blanditiis, et nam placeat pariatur dolore corrupti ducimus, soluta quibusdam illo amet quisquam incidunt libero officia! Autem ut ea numquam dicta nemo dolorum, voluptatem laboriosam quisquam cupiditate placeat veritatis perspiciatis culpa architecto quam, rerum, facilis illo excepturi explicabo. Fugit dolorem nemo corrupti inventore sint nihil reprehenderit quia ab quo, ad impedit cupiditate dolor facere harum non eos quod odio libero voluptatibus beatae omnis aliquam fuga asperiores dicta! Amet maiores ullam voluptate facere sint quasi rem iusto sequi eligendi molestias aspernatur quaerat, explicabo dolorum laboriosam. Saepe natus est fuga quos velit doloribus hic officiis veniam placeat veritatis commodi in quasi cum delectus aut, reiciendis dolores quod provident molestiae qui. Ratione nostrum itaque molestias placeat dolores ullam molestiae qui maxime quidem? Nesciunt totam amet numquam deserunt, voluptates temporibus explicabo magnam dolor, repellat molestias perspiciatis sapiente omnis sit atque neque ea pariatur veritatis dolores maiores laboriosam! Cumque ducimus, vel suscipit culpa numquam corporis dignissimos aliquam nostrum nobis obcaecati, voluptas fuga fugiat quis reiciendis temporibus provident neque quisquam deleniti, assumenda mollitia quia dicta magnam saepe? Temporibus impedit, suscipit accusamus omnis possimus doloribus est iure fugit magnam asperiores, dolorem natus ipsum quam odio aliquid soluta libero voluptates, quibusdam molestiae quia. Dignissimos quos ea, vero possimus quibusdam eveniet iusto quasi alias laborum itaque? Natus quam suscipit molestias dolor repellendus, nemo sunt incidunt optio ad accusantium at, eveniet, in non quis odit nobis nihil corporis deserunt distinctio facere minima eaque. Quis doloremque labore molestias minus molestiae reiciendis eius quia eveniet quam! Repellat, iusto vero labore corporis impedit itaque sint maiores quas, blanditiis magni nisi sunt tempore nemo rem. Temporibus est ratione nulla veniam cumque mollitia ducimus.
-    </p>
-    <p>Modi ex consequatur aperiam, assumenda officiis quae neque laboriosam. Veniam quod laudantium ratione facilis, quidem unde quis consequatur! Cupiditate eaque vero asperiores dolorem cum rerum nam, voluptatem suscipit exercitationem fuga?</p>
-  </article>
-</div>
+<?php
+$labelClass = "mb-1 font-semibold";
+$inputClass = "rounded-md mb-4 text-gray-700 py-1 px-2  focus:outline-none focus:ring focus:ring-orange-500";
+$inputErrorClass = "ring ring-red-500";
+$buttonClass = "bg-orange-600 rounded-md flex justify-center border-white border font-bold shadow-sm mt-6 py-1 px-4 mx-auto text-white hover:bg-orange-500 hover:shadow-md hover:shadow-orange-500 transition-all duration-300 ease-in-out";
+$editButtonClass = "edit-button  hover:text-orange-700 font-bold rounded";
+?>
+
+
+
+<main class="relative h-screen">
+  <section class="absolute top-0 w-screen">
+    <?php if (isset($errors['post'])) { ?>
+      <p class="text-white font-bold text-center p-2 bg-red-400 header-info transition-all duration-500 opacity-100"><?= $errors['post'] ?></p>
+    <?php } ?>
+    <?php if (isset($success['post'])) { ?>
+      <p class="text-white font-bold text-center p-2 bg-green-400  header-info transition-all duration-500 opacity-100"><?= $success['post'] ?></p>
+    <?php } ?>
+  </section>
+  <div class="content">
+    <!-- post list -->
+    <div class="flex flex-col items-center ">
+      <h2 class="text-4xl text-center mb-6">Liste des posts</h2>
+      <div class="max-w-2xl mx-auto w-full">
+        <!-- form to send new post -->
+        <form action="" method="post" class="flex flex-col mb-6 border bg-slate-950 p-6 rounded-md shadow-md shadow-slate-500">
+          <input type="hidden" name="tokenCSRF" value="<?= $_SESSION['tokenCSRF'] ?>">
+          <label for="title" class="<?= $labelClass ?>">Titre</label>
+          <input class="<?= $inputClass ?> <?= isset($errors['title']) ? $inputErrorClass : '' ?>" type="text" name="title" id="title" value="<?= $args['valeursEchappees']['title'] ?? '' ?>">
+          <?php if (!empty($errors["title"])) { ?>
+            <div class="text-red-500"><?= $errors["title"] ?></div>
+          <?php } ?>
+
+          <label for="content" class="<?= $labelClass ?>">Post</label>
+          <textarea class="<?= $inputClass ?> <?= isset($errors['content']) ? $inputErrorClass : '' ?>" type="text" name="content" id="content"><?= $args['valeursEchappees']['content'] ?? '' ?></textarea>
+          <?php if (!empty($errors["content"])) { ?>
+            <div class="text-red-500"><?= $errors["content"] ?></div>
+          <?php } ?>
+          <button type="submit" class="<?= $buttonClass ?>"><span>Créer un post</span></button>
+        </form>
+        <?php if (empty($posts)) { ?>
+          <p class="text-gray-500 text-center">Aucun post disponible</p>
+        <?php } ?>
+        <?php foreach ($posts as $post) { ?>
+          <div id="<?= "post-" . $post->useID ?>" class="border bg-slate-950 py-2 px-6 rounded-md shadow-md shadow-slate-500 mb-4">
+            <div class="flex justify-between items-center">
+              <h3 class="text-2xl pb-4"><?= $post->postTitle ?></h3>
+              <!-- form to delete post -->
+              <div class="flex gap-6">
+                <?php if (isset($_SESSION['user']['id']) && $post->useID === $_SESSION['user']['id']) { ?>
+                  <button id="<?= "edit-content-post-" . $post->useID ?>" class="<?= $editButtonClass ?>"><i class="fa-regular fa-pen-to-square"></i></button>
+                  <form action="/post/delete" method="post">
+                    <input type="hidden" name="tokenCSRF" value="<?= $_SESSION['tokenCSRF'] ?>">
+                    <input type="hidden" name="postID" value="<?= $post->postID ?>">
+                    <button type="submit" class="text-red-500">Supprimer</button>
+                  </form>
+                <?php } ?>
+              </div>
+            </div>
+
+            <p id="<?= "content-post-" . $post->useID ?>" class="text-gray-200 p-2 mb-2 rounded-md bg-slate-800"><?= $post->postContent ?></p>
+            <form action="/post/edit" method="post" id="<?= "input-content-post-" . $post->useID ?>" class="hidden edit-input relative ">
+              <div class="flex items-center">
+                <input type="hidden" name="tokenCSRF" value="<?= $_SESSION['tokenCSRF'] ?>">
+                <input class="w-full rounded-md mb-2 p-2  focus:outline-none focus:ring focus:ring-orange-500 text-gray-950 <?= isset($errors['content']) ? $inputErrorClass : '' ?>" type="text" name="content" placeholder="<?= $post->postContent ?>" value="<?= isset($errors['content']) ? $valeursEchappees['content'] : $post->postContent ?>">
+                <button type="submit" class="hover:text-green-700 font-bold rounded absolute right-0 text-green-500 text-lg mr-2"><i class="fa-solid fa-check"></i></button>
+              </div>
+            </form>
+            <!-- post by usePseudo on createdAt -->
+            <div class="flex gap-6">
+              <p class="text-gray-500"><?= $post->usePseudo ?></p>
+              <p class="text-gray-500"> le <?= $post->createdAt ?></p>
+            </div>
+          </div>
+        <?php } ?>
+      </div>
+      <!-- show no content if no post else show post list -->
+    </div>
+
+  </div>
+</main>
+
+<script>
+  const headerInfo = document.querySelector('.header-info');
+  if (headerInfo) {
+    setTimeout(() => {
+      headerInfo.classList.remove('opacity-100');
+      headerInfo.classList.add('opacity-0');
+      setTimeout(() => {
+        headerInfo.style.display = 'none';
+      }, 500);
+    }, 3000);
+  }
+
+  $editButtons = document.querySelectorAll('.edit-button');
+  $editButtons.forEach($editButton => {
+    $editButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = e.target.parentElement.id.replace('edit-content-post-', '');
+      const $content = document.getElementById(`content-post-${id}`);
+      const $input = document.getElementById(`input-content-post-${id}`);
+      if ($content.classList.contains('hidden')) {
+        $content.classList.remove('hidden');
+        $input.classList.add('hidden');
+      } else {
+        $content.classList.add('hidden');
+        $input.classList.remove('hidden');
+      }
+    });
+  });
+</script>
