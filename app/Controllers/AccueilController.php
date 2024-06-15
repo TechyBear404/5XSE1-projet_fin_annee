@@ -35,12 +35,13 @@ function newPost(): void
 {
     $formRules = getNewPostRules();
 
-    if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"])) {
+    if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"]) || $_POST["type"] !== "newPost") {
         $args["errors"]["tokenCSRF"] = "Une erreur s'est produite lors de la soumission du formulaire.";
         index($args);
         exit();
     } else {
         unset($_POST["tokenCSRF"]);
+        unset($_POST["type"]);
     }
 
     // Validate form input
@@ -73,12 +74,13 @@ function newPost(): void
  */
 function deletePost(): void
 {
-    if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"])) {
+    if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"]) || $_POST["type"] !== "deletePost") {
         $args["errors"]["tokenCSRF"] = "Une erreur s'est produite lors de la soumission du formulaire.";
         index($args);
         exit();
     } else {
         unset($_POST["tokenCSRF"]);
+        unset($_POST["type"]);
     }
 
     // Delete the post
@@ -102,12 +104,13 @@ function editPost(): void
 {
     $formRules = getNewPostRules();
 
-    if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"])) {
+    if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"]) || $_POST["type"] !== "editPost") {
         $args["errors"]["tokenCSRF"] = "Une erreur s'est produite lors de la soumission du formulaire.";
         index($args);
         exit();
     } else {
         unset($_POST["tokenCSRF"]);
+        unset($_POST["type"]);
     }
 
     // Validate form input

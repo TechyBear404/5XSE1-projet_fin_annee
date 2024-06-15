@@ -28,6 +28,7 @@ $editButtonClass = "edit-button  hover:text-orange-700 font-bold rounded";
 
           <!-- CSRF token and hidden fields -->
           <input type="hidden" name="tokenCSRF" value="<?= $_SESSION['tokenCSRF'] ?>">
+          <input type="hidden" name="type" value="newPost">
 
           <!-- Post title input -->
           <label for="title" class="<?= $labelClass ?>">Titre</label>
@@ -63,6 +64,7 @@ $editButtonClass = "edit-button  hover:text-orange-700 font-bold rounded";
                   <!-- Delete form -->
                   <form action="/post/delete" method="post">
                     <input type="hidden" name="tokenCSRF" value="<?= $_SESSION['tokenCSRF'] ?>">
+                    <input type="hidden" name="type" value="deletePost">
                     <input type="hidden" name="postID" value="<?= $post->postID ?>">
                     <button type="submit" class="text-red-500">Supprimer</button>
                   </form>
@@ -75,6 +77,7 @@ $editButtonClass = "edit-button  hover:text-orange-700 font-bold rounded";
             <form action="/post/edit" method="post" id="<?= "input-content-post-" . $post->useID ?>" class="hidden edit-input relative ">
               <div class="flex items-center">
                 <input type="hidden" name="tokenCSRF" value="<?= $_SESSION['tokenCSRF'] ?>">
+                <input type="hidden" name="type" value="editPost">
                 <input class="w-full rounded-md mb-2 p-2  focus:outline-none focus:ring focus:ring-orange-500 text-gray-950 <?= isset($errors['content']) ? $inputErrorClass : '' ?>" type="text" name="content" placeholder="<?= $post->postContent ?>" value="<?= isset($errors['content']) ? $valeursEchappees['content'] : $post->postContent ?>">
                 <button type="submit" class="hover:text-green-700 font-bold rounded absolute right-0 text-green-500 text-lg mr-2"><i class="fa-solid fa-check"></i></button>
               </div>
