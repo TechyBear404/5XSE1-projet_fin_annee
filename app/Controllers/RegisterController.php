@@ -1,13 +1,19 @@
 <?php
-// Importer le gestionnaire de vues.
+
+// Include required files
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'GestionVue.php';
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'FormManager.php';
 require_once dirname(__DIR__) . DS . 'Models' . DS . 'userModel.php';
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'Mail.php';
 
+// Initialize an empty array to store arguments
 $args = [];
 
-// Communiquer les informations de la page nécessaire au bon fonctionnement de la vue :
+/**
+ * Returns an array with page information
+ *
+ * @return array
+ */
 function getPageInfos(): array
 {
   return [
@@ -18,41 +24,47 @@ function getPageInfos(): array
   ];
 }
 
-// index : Afficher la liste des utilisateurs (il s'agit de la partie chargée par défaut) :
+/**
+ * Index function to handle registration form submission
+ *
+ * @param array $args
+ */
 function index(?array $args = []): void
 {
+  // Redirect to profile page if user is already connected
   if (isConnected()) {
     header('Location: ' . BASE_URL . '/profile');
     exit();
   }
-  // Afficher la vue "vue_accueil.php".
+
+  // Show registration form with arguments
   showView(getPageInfos(), 'register', $args);
 }
 
-// function creer(?array $args = []): void
-// {
-//   // Appeler la vue.
-//   showView(getPageInfos(), 'creer', $args);
-// }
-
+/**
+ * Creates a new user and sends verification email
+ */
 function createUser(): void
 {
-  // check if the tokenCSRF is valid
+  // Check if CSRF token is valid
   if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"])) {
     $args["errors"]["tokenCSRF"] = "Une erreur s'est produite lors de la soumission du formulaire.";
     index($args);
     exit();
   } else {
-    // remove "tokenCSRF" from the array $_POST if it's valid
+    // Remove CSRF token from POST array
     unset($_POST["tokenCSRF"]);
   }
 
+  // Get registration form rules
   $formRules = getRegisterRules();
+
+  // Verify form fields and validate input
   [$errors, $valeursEchappees] = verifChamps($formRules, $_POST);
   $args["errors"] = $errors;
   $args["valeursEchappees"] = $valeursEchappees;
 
-  // Appeler la vue.
+  // If no errors, create new user and send verification email
   if (empty($errors)) {
     $pseudo = $valeursEchappees["pseudo"];
     $email = $valeursEchappees["email"];
@@ -61,14 +73,12 @@ function createUser(): void
 
     $newUser = createNewUser($pseudo, $email, $password, $validationToken);
     if ($newUser) {
-      // echo '<pre>' . print_r($newUser, true) . '</pre>';
       sendVerificationMail($email, $validationToken);
       $args = [];
       $args["success"]["registration"] = "Votre compte a été créé avec succès. Veuillez vérifier votre adresse email pour activer votre compte.";
     } else {
       $args["errors"]["registration"] = "Une erreur s'est produite lors de la création de votre compte.";
     }
-    // echo '<pre>' . print_r($newUser, true) . '</pre>';
     index($args);
   } else {
     index($args);

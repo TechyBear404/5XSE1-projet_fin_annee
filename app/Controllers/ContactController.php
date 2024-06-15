@@ -1,13 +1,17 @@
 <?php
-// Importer le gestionnaire de vues.
+// Include necessary files
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'GestionVue.php';
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'FormManager.php';
 require_once dirname(__DIR__) . DS . 'Models' . DS . 'contactModel.php';
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'Mail.php';
 
+// Initialize an empty array for arguments
 $args = [];
 
-// Communiquer les informations de la page nécessaire au bon fonctionnement de la vue :
+/**
+ * Function to get page info
+ * Returns an array with page information
+ */
 function getPageInfos(): array
 {
   return [
@@ -18,43 +22,45 @@ function getPageInfos(): array
   ];
 }
 
-// index : Afficher la liste des utilisateurs (il s'agit de la partie chargée par défaut) :
+/**
+ * Index function to show the contact page
+ * @param array $args Optional arguments
+ */
 function index(?array $args = []): void
 {
-  // Afficher la vue "vue_accueil.php".
   showView(getPageInfos(), 'contact', $args);
 }
 
+/**
+ * Function to send contact request
+ */
 function sendContactRequest(): void
 {
-  // $args = [];
+  $args = [];
   $formRules = getContactRules();
-  // echo '<pre>' . print_r($formRules, true) . '</pre>';
   [$errors, $valeursEchappees] = verifChamps($formRules, $_POST);
   $args["errors"] = $errors;
   $args["valeursEchappees"] = $valeursEchappees;
 
-  // Si des erreurs sont survenues, on les affiche.
+  // If no errors in the form data
   if (empty($errors)) {
-
     $destinataire = "ector.seb@gmail.com";
     $sujet = "Demande Renseignements";
     $message = "<html><body>";
-    $message .= "<p> Nom: " . $valeursEchappees["nom"] . " Prénom: " . $valeursEchappees["prenom"] . "</p>";
+    $message .= "<p> Nom: " . $valeursEchappees["lastName"] . " Prénom: " . $valeursEchappees["firstName"] . "</p>";
     $message .= "<p>adresse de contact: " . $valeursEchappees["email"] . "</p>";
     $message .= "<p>Message: " . $valeursEchappees["message"] . "</p>";
     $message .= "</body></html>";
 
-
-    // Tentative d'envoi du mail (retourne "true" en cas de réussite et "false" en cas d'echec).
-    $args = [];
+    // If mail is sent successfully
     if (sendMail($destinataire, $sujet, $message)) {
-      $args["message"]["success"] = "Le courriel a été envoyé avec succès.";
+      $args = [];
+      $args["success"]["contact"] = "Le courriel a été envoyé avec succès.";
     } else {
-      $args["message"]["error"] = "Une erreur est survenue lors de l'envoi du courriel.";
+      $args["error"]["contact"] = "Une erreur est survenue lors de l'envoi du courriel.";
     }
     index($args);
   } else {
     index($args);
   }
-};
+}

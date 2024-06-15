@@ -128,21 +128,24 @@ function getEditProfileRules()
 
 
 
+// Returns the table name, in this case 'users'
 function getTable()
 {
   return 'users';
 }
 
+// Creates a new user with the provided pseudo, email, password, and activation token
 function createNewUser($pseudo, $email, $password, $activationToken)
 {
   $table = getTable();
   $sql = "INSERT INTO $table (usePseudo, useEmail, usePassword, useActivationToken) VALUES (:pseudo, :email, :password, :activationToken)";
   $pwd = password_hash($password, PASSWORD_DEFAULT);
 
+  // Use prepared statement to prevent SQL injection
   return executeQuery($sql, [':pseudo' => $pseudo, ':email' => $email, ':password' => $pwd, ':activationToken' => $activationToken]);
 }
 
-//function to validate accont by clicking link in email
+// Activates a user by updating the useActivated field to 1
 function activateUser($id)
 {
   $table = getTable();
@@ -150,6 +153,7 @@ function activateUser($id)
   return executeQuery($sql, [':id' => $id]);
 }
 
+// Retrieves all users
 function getUsers()
 {
   $table = getTable();
@@ -157,6 +161,7 @@ function getUsers()
   return executeQuery($sql)->fetchAll(PDO::FETCH_ASSOC);
 }
 
+// Retrieves a user by ID
 function getUserByID($id)
 {
   $table = getTable();
@@ -164,6 +169,7 @@ function getUserByID($id)
   return executeQuery($sql, [':id' => $id])->fetch(PDO::FETCH_ASSOC);
 }
 
+// Retrieves a user by pseudo
 function getUserByPseudo($pseudo)
 {
   $table = getTable();
@@ -171,16 +177,14 @@ function getUserByPseudo($pseudo)
   return executeQuery($sql, [':pseudo' => $pseudo])->fetch(PDO::FETCH_ASSOC);
 }
 
+// Checks if a pseudo is already used
 function isPseudoUsed($pseudo)
 {
   $user = getUserByPseudo($pseudo);
-  if ($user) {
-    return true;
-  } else {
-    return false;
-  }
+  return !empty($user);
 }
 
+// Retrieves a user by email
 function getUserByEmail($email)
 {
   $table = getTable();
@@ -188,38 +192,38 @@ function getUserByEmail($email)
   return executeQuery($sql, [':email' => $email])->fetch(PDO::FETCH_ASSOC);
 }
 
+// Checks if an email is already used
 function isEmailUsed($email)
 {
   $user = getUserByEmail($email);
-  if ($user) {
-    return true;
-  } else {
-    return false;
-  }
+  return !empty($user);
 }
 
-// function updateUser(int $id, ?string $pseudo = null, ?string $email = null, ?string $password = null)
+// Updates a user's information
 function updateUser($user)
 {
   $table = getTable();
   $fields = "";
   $fieldsValues = ['id' => $user['id']];
-  if ($user['pseudo']) {
-    if ($fields !== "") {
+
+  if (isset($user['pseudo'])) {
+    if (!empty($fields)) {
       $fields .= ", ";
     }
     $fields .= "usePseudo = :pseudo";
     $fieldsValues[':pseudo'] = $user['pseudo'];
   }
-  if ($user['email']) {
-    if ($fields !== "") {
+
+  if (isset($user['email'])) {
+    if (!empty($fields)) {
       $fields .= ", ";
     }
     $fields .= "useEmail = :email";
     $fieldsValues[':email'] = $user['email'];
   }
-  if ($user['password']) {
-    if ($fields !== "") {
+
+  if (isset($user['password'])) {
+    if (!empty($fields)) {
       $fields .= ", ";
     }
     $fields .= "usePassword = :password";
@@ -231,44 +235,46 @@ function updateUser($user)
   return executeQuery($sql, $fieldsValues);
 }
 
-function deleteUser(int $id)
+// Deletes a user by ID
+function deleteUser($id)
 {
   $table = getTable();
   $sql = "DELETE FROM $table WHERE useID = :id";
   return executeQuery($sql, [':id' => $id]);
 }
 
+// Connects a user by email and password
 function connectUser($email, $password)
 {
   $table = getTable();
   $sql = "SELECT * FROM $table WHERE useEmail = :email";
   $user = executeQuery($sql, [':email' => $email])->fetch(PDO::FETCH_ASSOC);
+
   if (empty($user)) {
     return ['error' => ['email' => 'Email incorrect']];
-  } else if (!password_verify($password, $user['usePassword'])) {
+  } elseif (!password_verify($password, $user['usePassword'])) {
     return ['error' => ['password' => 'Mot de passe incorrect']];
-  } else if ($user['useActivated'] == 0) {
+  } elseif ($user['useActivated'] == 0) {
     return ['error' => ['activation' => 'Compte non activé, veuillez vérifier votre boîte mail']];
-  } elseif (!empty($user) && password_verify($password, $user['usePassword']) && $user['useActivated'] == 1) {
+  } else {
     $_SESSION['user']['id'] = $user['useID'];
     return ['success' => 'Connexion réussie'];
   }
 }
 
+// Disconnects a user
 function disconnectUser()
 {
   session_destroy();
 }
 
+// Checks if a user is connected
 function isConnected()
 {
-  if (!isset($_SESSION['user']['id'])) {
-    return false;
-  } else {
-    return true;
-  }
+  return isset($_SESSION['user']['id']);
 }
 
+// Checks if a password is correct for the current user
 function isUserPassword($password)
 {
   $table = getTable();
@@ -276,17 +282,13 @@ function isUserPassword($password)
   $sql = "SELECT usePassword FROM $table WHERE useID = :id";
   $user = executeQuery($sql, [':id' => $id])->fetch(PDO::FETCH_ASSOC);
 
-  if (!empty($user) && password_verify($password, $user['usePassword'])) {
-    return true;
-  } else {
-    return false;
-  }
+  return password_verify($password, $user['usePassword']);
 }
 
+// Reactivates a user by updating their activation token
 function reActivateUser($pseudo, $validationToken)
 {
   $table = getTable();
   $sql = "UPDATE $table SET useActivationToken = :activationToken WHERE usePseudo = :pseudo";
-  $user = executeQuery($sql, [':activationToken' => $validationToken, ':pseudo' => $pseudo]);
-  return $user;
+  return executeQuery($sql, [':activationToken' => $validationToken, ':pseudo' => $pseudo]);
 }

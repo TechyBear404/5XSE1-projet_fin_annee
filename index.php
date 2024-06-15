@@ -8,7 +8,7 @@ require_once __DIR__ . DS . 'core' . DS . 'Session.php';
 // Permet de distinguer le mode développement du mode production.
 // Ceci me permet d'utiliser des conditions pour réaliser certaines actions seulement si je suis dans un mode spécifique.
 // Par exemple, dans le fichier /core/gestion_bdd.php, les erreurs ne s'afficheront dans le navigateur que si la constante DEV_MODE a été définie et que sa valeur vaut "true".
-define('DEV_MODE', true);
+define('DEV_MODE', false);
 
 // charger les variables d'environnement
 if (DEV_MODE === true) {
@@ -45,8 +45,8 @@ $routes = [
     getRoute('GET', '/', 'AccueilController', 'index'),
     getRoute('POST', '/', 'AccueilController', 'newPost'),
     getRoute('GET', '/login', 'LoginController', 'index'),
-    getRoute('GET', '/verify/{email}/{token}', 'LoginController', 'verifyEmail'),
     getRoute('POST', '/login', 'LoginController', 'loginUser'),
+    getRoute('GET', '/verify/{email}/{token}', 'LoginController', 'verifyEmail'),
     getRoute('GET', '/register', 'RegisterController', 'index'),
     getRoute('POST', '/register', 'RegisterController', 'createUser'),
     getRoute('GET', '/contact', 'ContactController', 'index'),

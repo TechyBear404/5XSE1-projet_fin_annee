@@ -1,11 +1,12 @@
 <?php
-// Importer le gestionnaire de vues.
+// Include required files
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'GestionVue.php';
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'FormManager.php';
 require_once dirname(__DIR__) . DS . 'Models' . DS . 'postModel.php';
 
-// phpinfo();
-// Communiquer les informations de la page nécessaire au bon fonctionnement de la vue :
+/**
+ * Returns page information as an array
+ */
 function getPageInfos(): array
 {
     return [
@@ -15,41 +16,45 @@ function getPageInfos(): array
     ];
 }
 
-// index : Afficher la liste des utilisateurs (il s'agit de la partie chargée par défaut) :
+/**
+ * Index function to display the index page
+ */
 function index(?array $args = []): void
 {
+    // Get all posts
     $args['posts'] = getPosts();
-    // Afficher la vue "vue_accueil.php".
+
+    // Show the view with the given arguments
     showView(getPageInfos(), 'index', $args);
 }
 
-
+/**
+ * Create a new post
+ */
 function newPost(): void
 {
     $formRules = getNewPostRules();
-    // check if the tokenCSRF is valid
+
     if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"])) {
         $args["errors"]["tokenCSRF"] = "Une erreur s'est produite lors de la soumission du formulaire.";
-        // echo "newPost";
         index($args);
         exit();
     } else {
-        // remove "tokenCSRF" from the array $_POST if it's valid
         unset($_POST["tokenCSRF"]);
     }
-    $args = [];
+
+    // Validate form input
     [$errors, $valeursEchappees] = verifChamps($formRules, $_POST);
     $args["errors"] = $errors;
     $args["valeursEchappees"] = $valeursEchappees;
-    // Call Vue.
-    if (empty($errors)) {
 
+    if (empty($errors)) {
+        // Create a new post
         $post = createPost($args["valeursEchappees"]['title'], $args["valeursEchappees"]['content']);
-        if (isset($post)) {
-            $args = [];
-            $args["success"]["post"] = "Le post a été créé avec succès.";
-        } elseif (isset($post["error"])) {
+        if (isset($post["error"])) {
             $args["errors"]["post"] = "Une erreur s'est produite lors de la création du post.";
+        } elseif (isset($post["error"])) {
+            $args["success"]["post"] = "Le post a été créé avec succès.";
         }
         index($args);
     } else {
@@ -57,70 +62,59 @@ function newPost(): void
     }
 }
 
+/**
+ * Delete a post
+ */
 function deletePost(): void
 {
-
-    // check if the tokenCSRF is valid
     if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"])) {
         $args["errors"]["tokenCSRF"] = "Une erreur s'est produite lors de la soumission du formulaire.";
-        // echo "newPost";
         index($args);
         exit();
     } else {
-        // remove "tokenCSRF" from the array $_POST if it's valid
         unset($_POST["tokenCSRF"]);
     }
-    $args = [];
-    // $args["errors"] = ["post" => "Une erreur s'est produite lors de la suppression du post."];
+
+    // Delete the post
     $args["success"] = ["post" => "Le post a été supprimé avec succès."];
     $post = removePost($_POST["postID"]);
 
-    if (isset($post)) {
-        $args["success"]["post"] = "Le post a été supprimé avec succès.";
-    } elseif (isset($post["error"])) {
+    if (isset($post["error"])) {
         $args["errors"]["post"] = "Une erreur s'est produite lors de la suppression du post.";
+    } elseif (isset($post["error"])) {
+        $args["success"]["post"] = "Le post a été supprimé avec succès.";
     }
-    // Call Vue.
-    // if (empty($errors)) {
 
-    //     $post = createPost($args["valeursEchappees"]['title'], $args["valeursEchappees"]['content']);
-    //     echo '<pre>' . print_r($post, true) . '</pre>';
-    //     // if (isset($post["success"])) {
-    //     //     $args["newPost"]["success"] = $post["success"];
-    //     // } elseif (isset($post["error"])) {
-    //     //     $args["newPost"]["errors"] = $post["error"];
-    //     // }
     index($args);
-    // } else {
-    //     index($args);
-    // }
 }
 
+/**
+ * Edit a post
+ */
 function editPost(): void
 {
     $formRules = getNewPostRules();
-    // check if the tokenCSRF is valid
+
     if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"])) {
         $args["errors"]["tokenCSRF"] = "Une erreur s'est produite lors de la soumission du formulaire.";
-        // echo "newPost";
         index($args);
         exit();
     } else {
-        // remove "tokenCSRF" from the array $_POST if it's valid
         unset($_POST["tokenCSRF"]);
     }
-    $args = [];
+
+    // Validate form input
     [$errors, $valeursEchappees] = verifChamps($formRules, $_POST);
     $args["errors"] = $errors;
     $args["valeursEchappees"] = $valeursEchappees;
-    // Call Vue.
-    if (empty($errors)) {
 
+    if (empty($errors)) {
+        // Edit the post
         $post = editPostContent($args["valeursEchappees"]['title'], $args["valeursEchappees"]['content']);
-        if (isset($post)) {
-            $args["success"]["post"] = "Le post a été modifié avec succès.";
-        } elseif (isset($post["error"])) {
+        if (isset($post["error"])) {
             $args["errors"]["post"] = "Une erreur s'est produite lors de la modification du post.";
+        } elseif (isset($post["error"])) {
+            $args["success"]["post"] = "Le post a été modifié avec succès.";
         }
         index($args);
     } else {

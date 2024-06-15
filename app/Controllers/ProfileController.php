@@ -1,12 +1,13 @@
 <?php
-// Importer le gestionnaire de vues.
+// Including required files
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'GestionVue.php';
 require_once dirname(__DIR__, 2) . DS . 'core' . DS . 'FormManager.php';
 require_once dirname(__DIR__) . DS . 'Models' . DS . 'userModel.php';
 
+// Initialize an empty array
 $args = [];
 
-// Fonction pour récupérer les informations de la page.
+// Function to get page information
 function getPageInfos(): array
 {
   return [
@@ -17,48 +18,59 @@ function getPageInfos(): array
   ];
 }
 
+// Index function
 function index(?array $args = []): void
 {
-  // Vérifier si l'utilisateur est connecté.
+  // Check if user is connected
   if (!isConnected()) {
     header('Location: ' . BASE_URL . '/login');
     exit();
   }
+
+  // Get user by ID
   $user = getUserByID($_SESSION['user']['id']);
   $args['user'] = $user;
-  // Afficher le profil de l'utilisateur.
+
+  // Show the view
   showView(getPageInfos(), 'index', $args);
 }
 
+// Logout function
 function logout(): void
 {
-  // Détruire la session.
+  // Destroy the session
   session_destroy();
-  // Rediriger vers la page d'acceuil.
+
+  // Redirect to the home page
   header('Location: ' . BASE_URL . '/');
   exit();
 }
 
-
+// Edit profile function
 function editProfile(?array $args = []): void
 {
-  // Vérifier si l'utilisateur est connecté.
+  // Check if user is connected
   if (!isConnected()) {
     header('Location: ' . BASE_URL . '/login');
     exit();
   }
-  // check if the tokenCSRF is valid
+
+  // Check for CSRF token
   if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"])) {
     $args["errors"]["tokenCSRF"] = "Une erreur s'est produite lors de la soumission du formulaire.";
     index($args);
     exit();
   } else {
-    // remove "tokenCSRF" from the array $_POST if it's valid
     unset($_POST["tokenCSRF"]);
   }
+
+  // Get edit profile rules
   $formEditProfileRules = getEditProfileRules();
-  //select rules by edited input in $_POST
+
+  // Initialize form rules
   $formRules = ["rules" => [], "inputNames" => $formEditProfileRules["inputNames"], "errors" => $formEditProfileRules["errors"]];
+
+  // Set rules for each field
   foreach ($formEditProfileRules["rules"] as $key => $value) {
     if (isset($_POST["pseudo"]) && !empty($_POST["pseudo"]) && $key === "pseudo") {
       $formRules["rules"][$key] = $value;
@@ -71,12 +83,13 @@ function editProfile(?array $args = []): void
       break;
     }
   }
-  // Verify the fields.
+
+  // Verify the fields
   [$errors, $valeursEchappees] = verifChamps($formRules, $_POST);
   $args["errors"] = $errors;
   $args["valeursEchappees"] = $valeursEchappees;
 
-  // Appeler la vue.
+  // If no errors, update user
   if (empty($errors) && !empty($valeursEchappees)) {
     $user = [
       "id" => $_SESSION['user']['id'],
@@ -84,10 +97,6 @@ function editProfile(?array $args = []): void
       "email" => $valeursEchappees["email"] ?? null,
       "password" => $valeursEchappees["passwordNew"] ?? null
     ];
-    // $id = $_SESSION['user']['id'];
-    // $pseudo = $valeursEchappees["pseudo"] ?? null;
-    // $email = $valeursEchappees["email"] ?? null;
-    // $password = $valeursEchappees["passwordNew"] ?? null;
 
     $updatedUser = updateUser($user);
     if ($updatedUser) {

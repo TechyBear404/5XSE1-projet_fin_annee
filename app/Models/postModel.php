@@ -28,59 +28,83 @@ function getNewPostRules()
   ];
 }
 
+// Function to get the table name
 function getTable()
 {
   return 'posts';
 }
 
-
+// Function to create a new post
 function createPost($title, $content)
 {
-  if ($_SESSION['user'] === null) {
-    echo 'Vous devez être connecté pour créer un post';
-    return false;
+  // Check if user is logged in
+  if (!isset($_SESSION['user'])) {
+    // echo 'Vous devez être connecté pour créer un post';
+    return ['error' => 'Vous devez être connecté pour créer un post'];
   }
+
+  // Get the table name
   $table = getTable();
   $sql = "INSERT INTO $table (postTitle, postContent, postUserID) VALUES (:title, :content, :userId)";
 
+  // Execute the query with prepared statements
   return executeQuery($sql, [':title' => $title, ':content' => $content, ':userId' => $_SESSION['user']['id']]);
 }
 
+// Function to get all posts
 function getPosts()
 {
+  // Get the table name
   $table = getTable();
-  $sql = "SELECT * FROM $table INNER JOIN users ON posts.postUserID = users.useID ORDER BY posts.createdAt DESC";
+  $sql = "SELECT * FROM $table INNER JOIN users ON $table.postUserID = users.useID ORDER BY $table.createdAt DESC";
+
+  // Execute the query and fetch all results as objects
   return executeQuery($sql)->fetchAll(PDO::FETCH_OBJ);
 }
 
+// Function to get a single post by ID
 function getPost($postID)
 {
+  // Get the table name
   $table = getTable();
   $sql = "SELECT * FROM $table WHERE postID = :postID";
+
+  // Execute the query with prepared statements and fetch the result as an object
   return executeQuery($sql, [':postID' => $postID])->fetch(PDO::FETCH_OBJ);
 }
 
+// Function to remove a post
 function removePost($postID)
 {
+  // Check if user is logged in and owns the post
   $post = getPost($postID);
-  if ($_SESSION['user'] === null || $post->postUserID !== $_SESSION['user']['id']) {
-    echo 'Vous devez être connecté pour supprimer un post';
-    return false;
+  if (!isset($_SESSION['user']) || $post->postUserID !== $_SESSION['user']['id']) {
+
+    return ['error' => 'Vous devez être connecté pour supprimer un post'];
   }
 
+  // Get the table name
   $table = getTable();
   $sql = "DELETE FROM $table WHERE postID = :postID";
+
+  // Execute the query with prepared statements
   return executeQuery($sql, [':postID' => $postID]);
 }
 
+// Function to edit a post's content
 function editPostContent($postID, $content)
 {
+  // Check if user is logged in and owns the post
   $post = getPost($postID);
-  if ($_SESSION['user'] === null || $post->postUserID !== $_SESSION['user']['id']) {
-    echo 'Vous devez être connecté pour supprimer un post';
-    return false;
+  if (!isset($_SESSION['user']) || $post->postUserID !== $_SESSION['user']['id']) {
+
+    return ['error' => 'Vous devez être connecté pour modifier un post'];
   }
+
+  // Get the table name
   $table = getTable();
   $sql = "UPDATE $table SET postContent = :content WHERE postID = :postID AND postUserID = :userId";
+
+  // Execute the query with prepared statements
   return executeQuery($sql, [':content' => $content, ':postID' => $postID, ':userId' => $_SESSION['user']['id']]);
 }
