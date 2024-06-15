@@ -84,8 +84,8 @@ function deletePost(): void
     }
 
     // Delete the post
-    $args["success"] = ["post" => "Le post a été supprimé avec succès."];
     $post = removePost($_POST["postID"]);
+
 
     if (isset($post["error"])) {
         $args["errors"]["post"] = "Une erreur s'est produite lors de la suppression du post.";
@@ -94,6 +94,7 @@ function deletePost(): void
         $args["success"]["post"] = "Le post a été supprimé avec succès.";
     }
 
+    header('Location: ' . BASE_URL . '/');
     index($args);
 }
 
@@ -126,6 +127,7 @@ function editPost(): void
         } elseif (isset($post["error"])) {
             $args["success"]["post"] = "Le post a été modifié avec succès.";
         }
+        header('Location: ' . BASE_URL . '/');
         index($args);
     } else {
         index($args);
