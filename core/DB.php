@@ -17,6 +17,19 @@ function db(): ?PDO
 // Executes a SQL query with optional parameters
 function executeQuery(string $sql, ?array $params = null): ?PDOStatement
 {
+  // Check if there is a last query saved $_SESSION
+  if (isset($_SESSION['lastQuery'])) {
+
+    $deltaTime = time() - $_SESSION['lastQuery']['time'];
+    // If the last query is the same as the current query, an too short amount of time has passed
+    if ($_SESSION['lastQuery']['sql'] === $sql && $deltaTime < 2) {
+      // die('Too many queries in a short amount of time');
+      die('Trop de requêtes en peu de temps');
+    }
+  }
+  $_SESSION['lastQuery']['time'] = time();
+  $_SESSION['lastQuery']['sql'] = $sql;
+
   $db = db();
   if (!$db) {
     throw new RuntimeException("Database connection failed");
