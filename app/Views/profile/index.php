@@ -17,6 +17,17 @@ function isPasswordErrors($errors)
 
 <!-- Profile page main content -->
 <main class="relative  min-h-screen">
+  <!-- Section for displaying error or success messages -->
+  <section class="absolute top-0 w-full">
+    <?php if (isset($errors['profile'])) { ?>
+      <!-- Display error message if activation error occurs -->
+      <p class="text-white font-bold text-center p-2 bg-red-400 header-info transition-all duration-500 opacity-100"><?= $errors['profile'] ?></p>
+    <?php } ?>
+    <?php if (isset($success['profile'])) { ?>
+      <!-- Display success message if activation is successful -->
+      <p class="text-white font-bold text-center p-2 bg-green-400 header-info transition-all duration-500 opacity-100"><?= $success['profile'] ?></p>
+    <?php } ?>
+  </section>
   <div class="content">
     <div id="profile">
       <h2 class="text-4xl text-center mb-6">Mon Profil</h2>
@@ -154,4 +165,16 @@ function isPasswordErrors($errors)
   editButtons.forEach((button, index) => {
     button.addEventListener('click', clickHandler);
   });
+
+  const headerInfo = document.querySelector('.header-info');
+  if (headerInfo) {
+    // Hide the header info after 3 seconds
+    setTimeout(() => {
+      headerInfo.classList.remove('opacity-100');
+      headerInfo.classList.add('opacity-0');
+      setTimeout(() => {
+        headerInfo.style.display = 'none';
+      }, 500);
+    }, 3000);
+  }
 </script>

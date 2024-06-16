@@ -101,9 +101,9 @@ function editProfile(?array $args = []): void
     $updatedUser = updateUser($user);
     if ($updatedUser) {
       $args = [];
-      $args["success"] = "Votre compte a été edité avec succès.";
+      $args["success"]["profile"] = "Votre compte a été modifié avec succès.";
     } else {
-      $args["errors"]["db"] = "Une erreur s'est produite lors de la modification de votre compte.";
+      $args["errors"]["profile"] = "Une erreur s'est produite lors de la modification de votre compte.";
     }
     index($args);
   } else {
