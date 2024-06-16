@@ -73,7 +73,6 @@ function newPost(): void
  */
 function deletePost(): void
 {
-    echo '<pre>' . print_r("test") . '</pre>';
     if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"])) {
         $args["errors"]["tokenCSRF"] = "Une erreur s'est produite lors de la soumission du formulaire.";
         index($args);
@@ -84,7 +83,6 @@ function deletePost(): void
 
     // Delete the post
     $post = removePost($_POST["postID"]);
-
 
     if (isset($post["error"])) {
         $args["errors"]["post"] = "Une erreur s'est produite lors de la suppression du post.";
