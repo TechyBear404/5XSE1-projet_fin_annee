@@ -75,10 +75,10 @@ $editButtonClass = "edit-button  hover:text-orange-700 font-bold rounded";
             <!-- Post content and edit form -->
             <p id="<?= "content-post-" . $post->useID ?>" class="text-gray-200 p-2 mb-2 rounded-md bg-slate-800"><?= $post->postContent ?></p>
             <!-- Edit form -->
-            <form action="/post/edit" method="post" id="<?= "input-content-post-" . $post->useID ?>" class="hidden edit-input relative ">
+            <form action="" method="post" id="<?= "input-content-post-" . $post->useID ?>" class="hidden edit-input relative ">
               <div class="flex items-center">
                 <input type="hidden" name="tokenCSRF" value="<?= $_SESSION['tokenCSRF'] ?>">
-                <input type="hidden" name="type" value="editPost">
+                <input type="hidden" name="_method" value="edit">
                 <input type="hidden" name="postID" value="<?= $post->postID ?>">
                 <input class="w-full rounded-md mb-2 p-2  focus:outline-none focus:ring focus:ring-orange-500 text-gray-950 <?= isset($errors['editContent']) ? $inputErrorClass : '' ?>" type="text" name="editContent" value="<?= isset($errors['editContent']) ? $valeursEchappees['editContent'] : $post->postContent ?>" min="8" max="420" required>
                 <button type="submit" class="hover:text-green-700 font-bold rounded absolute right-0 text-green-500 text-lg mr-2"><i class="fa-solid fa-check"></i></button>

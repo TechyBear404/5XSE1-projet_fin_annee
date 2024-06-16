@@ -44,6 +44,7 @@ $patterns = [
 $routes = [
     getRoute('GET', '/', 'AccueilController', 'index'),
     getRoute('POST', '/', 'AccueilController', 'newPost'),
+    getRoute('EDIT', '/', 'AccueilController', 'editPost'),
     getRoute('DELETE', '/', 'AccueilController', 'deletePost'),
     getRoute('GET', '/login', 'LoginController', 'index'),
     getRoute('POST', '/login', 'LoginController', 'loginUser'),
@@ -55,7 +56,6 @@ $routes = [
     getRoute('GET', '/profile', 'ProfileController', 'index'),
     getRoute('GET', '/logout', 'ProfileController', 'logout'),
     getRoute('POST', '/profile', 'ProfileController', 'editProfile'),
-    getRoute('POST', '/post/edit', 'AccueilController', 'editPost'),
 
 ];
 
