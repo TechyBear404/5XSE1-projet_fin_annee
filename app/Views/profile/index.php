@@ -16,7 +16,7 @@ function isPasswordErrors($errors)
 ?>
 
 <!-- Profile page main content -->
-<main class="relative h-screen">
+<main class="relative  min-h-screen">
   <div class="content">
     <div id="profile">
       <h2 class="text-4xl text-center mb-6">Mon Profil</h2>
@@ -34,7 +34,7 @@ function isPasswordErrors($errors)
                 <button id="edit-pseudo" class="<?= $editButtonClass ?>"><i class="fa-regular fa-pen-to-square"></i></button>
               </div>
             </div>
-            <input id="input-pseudo" class="<?= $inputClass ?>  edit-input <?= isset($errors['pseudo']) ? $inputErrorClass . "" : 'hidden' ?>" type="text" name="pseudo" placeholder="<?= $user['usePseudo'] ?>" value="<?= isset($errors['pseudo']) ? $valeursEchappees['pseudo'] : null ?>">
+            <input id="input-pseudo" class="<?= $inputClass ?>  edit-input <?= isset($errors['pseudo']) ? $inputErrorClass . "" : 'hidden' ?>" type="text" name="pseudo" placeholder="<?= $user['usePseudo'] ?>" value="<?= isset($errors['pseudo']) ? $valeursEchappees['pseudo'] : null ?>" min="2" max="16">
 
             <?php if (!empty($errors["pseudo"])) { ?>
               <!-- Display pseudo error message -->
@@ -71,7 +71,7 @@ function isPasswordErrors($errors)
             <div id="input-password" class="edit-input <?= isset($errors['password']) || isset($errors['passwordCurrent']) || isset($errors['passwordConfirm'])  ? "" : 'hidden' ?>">
               <!-- Current password input -->
               <label for="passwordCurrent" class="<?= $labelClass ?>">Mot de passe actuel:</label>
-              <input id="input-passwordCurrent" type="password" name="passwordCurrent" class="password <?= $inputClass ?> <?= isset($errors['passwordCurrent']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors) && isPasswordErrors($errors) ? $valeursEchappees['passwordCurrent'] : null ?>">
+              <input id="input-passwordCurrent" type="password" name="passwordCurrent" class="password <?= $inputClass ?> <?= isset($errors['passwordCurrent']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors) && isPasswordErrors($errors) ? $valeursEchappees['passwordCurrent'] : null ?>" min="2" max="32">
 
               <?php if (!empty($errors["passwordCurrent"])) { ?>
                 <!-- Display password current error message -->
@@ -80,7 +80,7 @@ function isPasswordErrors($errors)
 
               <!-- New password input -->
               <label for="passwordNew" class="<?= $labelClass ?>">Nouveau mot de passe:</label>
-              <input id="input-passwordNew" type="password" name="passwordNew" class="password <?= $inputClass ?> <?= isset($errors['passwordNew']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors) && isPasswordErrors($errors) ? $valeursEchappees['passwordNew'] : null ?>">
+              <input id="input-passwordNew" type="password" name="passwordNew" class="password <?= $inputClass ?> <?= isset($errors['passwordNew']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors) && isPasswordErrors($errors) ? $valeursEchappees['passwordNew'] : null ?>" min="2" max="32">
 
               <?php if (!empty($errors["passwordNew"])) { ?>
                 <!-- Display password new error message -->
@@ -89,7 +89,7 @@ function isPasswordErrors($errors)
 
               <!-- Confirm new password input -->
               <label for="passwordConfirm" class="<?= $labelClass ?>">Confirmer le mot de passe:</label>
-              <input id="input-passwordConfirm" type="password" name="passwordConfirm" class="password <?= $inputClass ?> <?= isset($errors['passwordConfirm']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors) && isPasswordErrors($errors) ? $valeursEchappees['passwordConfirm'] : null ?>">
+              <input id="input-passwordConfirm" type="password" name="passwordConfirm" class="password <?= $inputClass ?> <?= isset($errors['passwordConfirm']) ? $inputErrorClass : '' ?>" placeholder="********" value="<?= isset($errors) && isPasswordErrors($errors) ? $valeursEchappees['passwordConfirm'] : null ?>" min="2" max="32">
 
               <?php if (!empty($errors["passwordConfirm"])) { ?>
                 <!-- Display password confirm error message -->

@@ -5,20 +5,40 @@ function getNewPostRules()
 {
   return [
     "rules" => [
-      'title' => [
+      'newTitle' => [
         'required' => true,
         'minLength' => 2,
         'maxLength' => 50,
       ],
-      'content' => [
+      'newContent' => [
+        'required' => true,
+        'minLength' => 8,
+        'maxLength' => 420,
+      ]
+    ],
+    'inputNames' => [
+      'newTitle' => 'Titre',
+      'newContent' => 'Contenu'
+    ],
+    "errors" => [
+      'required' => "Le champ %0% est requis.",
+      'minLength' => "Le champ %0% doit contenir au moins %1% caractères.",
+      'maxLength' => "Le champ %0% doit contenir au maximum %1% caractères.",
+    ]
+  ];
+}
+function getEditPostRules()
+{
+  return [
+    "rules" => [
+      'editContent' => [
         'required' => true,
         'minLength' => 8,
         'maxLength' => 500,
       ]
     ],
     'inputNames' => [
-      'title' => 'Titre',
-      'content' => 'Contenu'
+      'editContent' => 'Contenu'
     ],
     "errors" => [
       'required' => "Le champ %0% est requis.",
@@ -108,9 +128,11 @@ function editPostContent($postID, $content)
 {
   // Check if user is logged in and owns the post
   $post = getPost($postID);
-  if (!isset($_SESSION['user']) || $post->postUserID !== $_SESSION['user']['id']) {
 
-    return ['error' => 'Vous devez être connecté pour modifier un post'];
+  echo $post->postUserID;
+  echo $_SESSION['user']['id'];
+  if (!isset($_SESSION['user']) || $post->postUserID !== $_SESSION['user']['id']) {
+    return ['error' => 'Vous devez être connecté pourne pouvez pas modifier ce post'];
   }
 
   // Get the table name
@@ -120,7 +142,7 @@ function editPostContent($postID, $content)
   // Execute the query with prepared statements
   $response = executeQuery($sql, [':content' => $content, ':postID' => $postID, ':userId' => $_SESSION['user']['id']]);
   if ($response->rowCount() === 0) {
-    return ['error' => 'Le post n\'a pas été édité'];
+    return ['errors' => 'Le post n\'a pas été édité'];
   } else {
     return ['success' => 'Le post a été édité'];
   }

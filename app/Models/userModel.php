@@ -9,13 +9,12 @@ function getLoginRules()
     "rules" => [
       'email' => [
         'required' => true,
-        'minLength' => 2,
-        'maxLength' => 255,
+        'type' => 'email',
       ],
       'password' => [
         'required' => true,
         'minLength' => 8,
-        'maxLength' => 72,
+        'maxLength' => 32,
         'type' => 'password',
       ]
     ],
@@ -41,7 +40,7 @@ function getRegisterRules()
       'pseudo' => [
         'required' => true,
         'minLength' => 2,
-        'maxLength' => 255,
+        'maxLength' => 16,
         'unique' => 'user'
       ],
       'email' => [
@@ -52,7 +51,7 @@ function getRegisterRules()
       'password' => [
         'required' => true,
         'minLength' => 8,
-        'maxLength' => 72,
+        'maxLength' => 32,
         'type' => 'password',
       ],
       'passwordConfirm' => [

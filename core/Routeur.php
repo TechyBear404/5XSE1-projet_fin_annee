@@ -42,7 +42,7 @@ function startRouter(array $routes, ?array $patterns = []): void
     $method = $_SERVER['REQUEST_METHOD'];
 
     // Si la méthode est "POST", on vérifie si une méthode particulière a été ajoutée dans les champs cachés du formulaire ("PUT" ou "DELETE").
-    $method = $method === 'POST' && isset($_POST['_method']) ? strtoupper($_POST['_method']) : $method;
+    $method = ($method === 'POST') && isset($_POST['_method']) ? strtoupper($_POST['_method']) : $method;
 
     // Traiter chaque route :
     foreach ($routes as $route) {

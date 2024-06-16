@@ -8,7 +8,7 @@ $editButtonClass = "edit-button  hover:text-orange-700 font-bold rounded";
 
 // Main HTML structure
 ?>
-<main class="relative h-screen">
+<main class="relative min-h-screen">
   <section class="absolute top-0 w-screen">
     <!-- Display error or success messages -->
     <?php if (isset($errors['post'])) { ?>
@@ -31,17 +31,17 @@ $editButtonClass = "edit-button  hover:text-orange-700 font-bold rounded";
           <input type="hidden" name="type" value="newPost">
 
           <!-- Post title input -->
-          <label for="title" class="<?= $labelClass ?>">Titre</label>
-          <input class="<?= $inputClass ?> <?= isset($errors['title']) ? $inputErrorClass : '' ?>" type="text" name="title" id="title" value="<?= $args['valeursEchappees']['title'] ?? '' ?>">
-          <?php if (!empty($errors["title"])) { ?>
-            <div class="text-red-500"><?= $errors["title"] ?></div>
+          <label for="newTitle" class="<?= $labelClass ?>">Titre</label>
+          <input class="<?= $inputClass ?> <?= isset($errors['newTitle']) ? $inputErrorClass : '' ?>" type="text" name="newTitle" id="newTitle" value="<?= $args['valeursEchappees']['newTitle'] ?? '' ?>" min="2" max="50" required>
+          <?php if (!empty($errors["newTitle"])) { ?>
+            <div class="text-red-500"><?= $errors["newTitle"] ?></div>
           <?php } ?>
 
           <!-- Post content input -->
-          <label for="content" class="<?= $labelClass ?>">Post</label>
-          <textarea class="<?= $inputClass ?> <?= isset($errors['content']) ? $inputErrorClass : '' ?>" type="text" name="content" id="content"><?= $args['valeursEchappees']['content'] ?? '' ?></textarea>
-          <?php if (!empty($errors["content"])) { ?>
-            <div class="text-red-500"><?= $errors["content"] ?></div>
+          <label for="newContent" class="<?= $labelClass ?>">Post</label>
+          <textarea class="<?= $inputClass ?> <?= isset($errors['newContent']) ? $inputErrorClass : '' ?>" type="text" name="newContent" id="newContent" min="8" max="420" required><?= $args['valeursEchappees']['newContent'] ?? '' ?></textarea>
+          <?php if (!empty($errors["newContent"])) { ?>
+            <div class="text-red-500"><?= $errors["newContent"] ?></div>
           <?php } ?>
 
           <button type="submit" class="<?= $buttonClass ?>"><span>Créer un post</span></button>
@@ -62,9 +62,10 @@ $editButtonClass = "edit-button  hover:text-orange-700 font-bold rounded";
                   <!-- Edit button -->
                   <button id="<?= "edit-content-post-" . $post->useID ?>" class="<?= $editButtonClass ?>"><i class="fa-regular fa-pen-to-square"></i></button>
                   <!-- Delete form -->
-                  <form action="/post/delete" method="post">
+                  <form action="" method="POST">
                     <input type="hidden" name="tokenCSRF" value="<?= $_SESSION['tokenCSRF'] ?>">
-                    <input type="hidden" name="type" value="deletePost">
+
+                    <input type="hidden" name="_method" value="delete">
                     <input type="hidden" name="postID" value="<?= $post->postID ?>">
                     <button type="submit" class="text-red-500">Supprimer</button>
                   </form>
@@ -78,7 +79,8 @@ $editButtonClass = "edit-button  hover:text-orange-700 font-bold rounded";
               <div class="flex items-center">
                 <input type="hidden" name="tokenCSRF" value="<?= $_SESSION['tokenCSRF'] ?>">
                 <input type="hidden" name="type" value="editPost">
-                <input class="w-full rounded-md mb-2 p-2  focus:outline-none focus:ring focus:ring-orange-500 text-gray-950 <?= isset($errors['content']) ? $inputErrorClass : '' ?>" type="text" name="content" placeholder="<?= $post->postContent ?>" value="<?= isset($errors['content']) ? $valeursEchappees['content'] : $post->postContent ?>">
+                <input type="hidden" name="postID" value="<?= $post->postID ?>">
+                <input class="w-full rounded-md mb-2 p-2  focus:outline-none focus:ring focus:ring-orange-500 text-gray-950 <?= isset($errors['editContent']) ? $inputErrorClass : '' ?>" type="text" name="editContent" value="<?= isset($errors['editContent']) ? $valeursEchappees['editContent'] : $post->postContent ?>" min="8" max="420" required>
                 <button type="submit" class="hover:text-green-700 font-bold rounded absolute right-0 text-green-500 text-lg mr-2"><i class="fa-solid fa-check"></i></button>
               </div>
             </form>

@@ -7,7 +7,7 @@ $buttonClass = "bg-orange-600 rounded-md flex justify-center border-white border
 ?>
 
 <!-- Main layout container -->
-<main class="relative h-full">
+<main class="relative min-h-screen">
   <!-- Section for displaying error or success messages -->
   <section class="absolute top-0 w-full">
     <?php if (isset($errors['activation'])) { ?>
@@ -38,7 +38,7 @@ $buttonClass = "bg-orange-600 rounded-md flex justify-center border-white border
 
           <!-- Email input field -->
           <label class="<?= $labelClass ?>" for="email">Email</label>
-          <input class="<?= $inputClass ?> <?= isset($errors['email']) ? $inputErrorClass : '' ?>" type="email" name="email" id="email" value="<?= $args['valeursEchappees']['email'] ?? '' ?>">
+          <input class="<?= $inputClass ?> <?= isset($errors['email']) ? $inputErrorClass : '' ?>" type="email" name="email" id="email" value="<?= $args['valeursEchappees']['email'] ?? '' ?>" required>
           <?php if (!empty($errors["email"])) { ?>
             <!-- Display email error message if any -->
             <div class="text-red-500"><?= $errors["email"] ?></div>
@@ -46,7 +46,7 @@ $buttonClass = "bg-orange-600 rounded-md flex justify-center border-white border
 
           <!-- Password input field -->
           <label class="<?= $labelClass ?>" for="password">Mot de passe</label>
-          <input class="<?= $inputClass ?> <?= isset($errors['password']) ? $inputErrorClass : '' ?>" type="password" name="password" id="password" value="<?= $args['valeursEchappees']['password'] ?? '' ?>">
+          <input class="<?= $inputClass ?> <?= isset($errors['password']) ? $inputErrorClass : '' ?>" type="password" name="password" id="password" value="<?= $args['valeursEchappees']['password'] ?? '' ?>" min="8" max="32" required>
           <?php if (!empty($errors["password"])) { ?>
             <!-- Display password error message if any -->
             <div class="text-red-500"><?= $errors["password"] ?></div>

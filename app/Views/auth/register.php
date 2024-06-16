@@ -8,7 +8,7 @@ $buttonClass = "bg-blue-800 rounded-md border-white border font-bold shadow-md m
 
 
 <!-- Main content area -->
-<main class="relative h-full">
+<main class="relative  min-h-screen">
   <section class="absolute top-0 w-full">
     <?php
     // Display registration errors or success messages
@@ -28,28 +28,28 @@ $buttonClass = "bg-blue-800 rounded-md border-white border font-bold shadow-md m
 
           <!-- Pseudo input field -->
           <label class="<?= $labelClass ?>" for="pseudo">Pseudo</label>
-          <input class="<?= $inputClass ?> <?= !empty($errors["pseudo"]) ? $inputErrorClass : '' ?>" type="text" name="pseudo" id="pseudo" value="<?= $valeursEchappees['pseudo'] ?? '' ?>">
+          <input class="<?= $inputClass ?> <?= !empty($errors["pseudo"]) ? $inputErrorClass : '' ?>" type="text" name="pseudo" id="pseudo" value="<?= $valeursEchappees['pseudo'] ?? '' ?>" min="2" max="16" required>
           <?php if (!empty($errors["pseudo"])) { ?>
             <div class="text-red-500"><?= $errors["pseudo"] ?></div>
           <?php } ?>
 
           <!-- Email input field -->
           <label class="<?= $labelClass ?>" for="email">Email</label>
-          <input class="<?= $inputClass ?> <?= !empty($errors["email"]) ? $inputErrorClass : '' ?>" type="text" name="email" id="email" value="<?= $valeursEchappees['email'] ?? '' ?>">
+          <input class="<?= $inputClass ?> <?= !empty($errors["email"]) ? $inputErrorClass : '' ?>" type="text" name="email" id="email" value="<?= $valeursEchappees['email'] ?? '' ?>" required>
           <?php if (!empty($errors["email"])) { ?>
             <div class="text-red-500"><?= $errors["email"] ?></div>
           <?php } ?>
 
           <!-- Password input field -->
           <label class="<?= $labelClass ?>" for="password">Mot de passe</label>
-          <input class="<?= $inputClass ?> <?= !empty($errors["password"]) ? $inputErrorClass : '' ?>" type="password" name="password" id="password" value="<?= $valeursEchappees['password'] ?? '' ?>">
+          <input class="<?= $inputClass ?> <?= !empty($errors["password"]) ? $inputErrorClass : '' ?>" type="password" name="password" id="password" value="<?= $valeursEchappees['password'] ?? '' ?>" min="8" max="32" required>
           <?php if (!empty($errors["password"])) { ?>
             <div class="text-red-500"><?= $errors["password"] ?></div>
           <?php } ?>
 
           <!-- Password confirmation input field -->
           <label class="<?= $labelClass ?>" for="passwordConfirm">Confirmer MDP</label>
-          <input class="<?= $inputClass ?> <?= !empty($errors["passwordConfirm"]) ? $inputErrorClass : '' ?>" type="password" name="passwordConfirm" id="passwordConfirm" value="<?= $valeursEchappees['passwordConfirm'] ?? '' ?>">
+          <input class="<?= $inputClass ?> <?= !empty($errors["passwordConfirm"]) ? $inputErrorClass : '' ?>" type="password" name="passwordConfirm" id="passwordConfirm" value="<?= $valeursEchappees['passwordConfirm'] ?? '' ?>" min="8" max="32" required>
           <?php if (!empty($errors["passwordConfirm"])) { ?>
             <div class="text-red-500"><?= $errors["passwordConfirm"] ?></div>
           <?php } ?>

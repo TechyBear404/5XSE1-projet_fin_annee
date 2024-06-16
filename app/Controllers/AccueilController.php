@@ -12,7 +12,8 @@ function getPageInfos(): array
     return [
         'vue' => 'accueil',
         'title' => "Page d'Accueil",
-        'description' => "Description de la page d'accueil..."
+        'description' => "Description de la page d'accueil...",
+        'baseUrlPage' => BASE_URL . '/'
     ];
 }
 
@@ -51,22 +52,23 @@ function newPost(): void
 
     if (empty($errors)) {
         // Create a new post
+        echo '<pre> Valeurs échappées :</pre>';
         if (!isset($_SESSION['user'])) {
             $args["errors"]["post"] = "Vous devez être connecté pour créer un post.";
             index($args);
             exit();
         }
         try {
-            createPost($args["valeursEchappees"]['title'], $args["valeursEchappees"]['content']);
+            createPost($args["valeursEchappees"]['newTitle'], $args["valeursEchappees"]['newContent']);
             $args = [];
             $args["success"]["post"] = "Le post a été créé avec succès.";
         } catch (Exception $e) {
             $args["errors"]["post"] = "Une erreur s'est produite lors de la création du post.";
         }
-        index($args);
-    } else {
-        index($args);
+        // $redirection = getPageInfos()['baseUrlPage'];
+        // header("Location: $redirection");
     }
+    index($args);
 }
 
 /**
@@ -74,6 +76,7 @@ function newPost(): void
  */
 function deletePost(): void
 {
+    echo '<pre>' . print_r("test") . '</pre>';
     if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"]) || $_POST["type"] !== "deletePost") {
         $args["errors"]["tokenCSRF"] = "Une erreur s'est produite lors de la soumission du formulaire.";
         index($args);
@@ -94,7 +97,6 @@ function deletePost(): void
         $args["success"]["post"] = "Le post a été supprimé avec succès.";
     }
 
-    header('Location: ' . BASE_URL . '/');
     index($args);
 }
 
@@ -103,10 +105,10 @@ function deletePost(): void
  */
 function editPost(): void
 {
-    $formRules = getNewPostRules();
+    $formRules = getEditPostRules();
 
     if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"]) || $_POST["type"] !== "editPost") {
-        $args["errors"]["tokenCSRF"] = "Une erreur s'est produite lors de la soumission du formulaire.";
+        $args["errors"]["post"] = "Une erreur s'est produite lors de la soumission du formulaire.";
         index($args);
         exit();
     } else {
@@ -121,15 +123,14 @@ function editPost(): void
 
     if (empty($errors)) {
         // Edit the post
-        $post = editPostContent($args["valeursEchappees"]['title'], $args["valeursEchappees"]['content']);
+
+        $post = editPostContent($_POST['postID'], $args["valeursEchappees"]['editContent']);
+        echo '<pre>' . print_r($post) . '</pre>';
         if (isset($post["error"])) {
             $args["errors"]["post"] = "Une erreur s'est produite lors de la modification du post.";
         } elseif (isset($post["error"])) {
             $args["success"]["post"] = "Le post a été modifié avec succès.";
         }
-        header('Location: ' . BASE_URL . '/');
-        index($args);
-    } else {
-        index($args);
     }
+    index($args);
 }

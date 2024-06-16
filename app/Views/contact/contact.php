@@ -7,7 +7,7 @@ $buttonClass = "bg-orange-600 rounded-md flex justify-center border-white border
 ?>
 
 <!-- Main container -->
-<main class="relative h-full">
+<main class="relative  min-h-screen">
     <!-- Section for displaying error or success messages -->
     <section class="absolute top-0 w-full">
         <?php if (isset($errors['contact'])) { ?>
@@ -32,7 +32,7 @@ $buttonClass = "bg-orange-600 rounded-md flex justify-center border-white border
 
                     <!-- First name input -->
                     <label class="<?= $labelClass ?>" for="firstName">Prénom</label>
-                    <input class="<?= $inputClass ?> <?= isset($errors['firstName']) ? $inputErrorClass : '' ?>" type="text" name="firstName" id="pseudo" value="<?= $args['valeursEchappees']['firstName'] ?? '' ?>">
+                    <input class="<?= $inputClass ?> <?= isset($errors['firstName']) ? $inputErrorClass : '' ?>" type="text" name="firstName" id="pseudo" value="<?= $args['valeursEchappees']['firstName'] ?? '' ?>" min="2" max="255" required>
                     <?php if (!empty($errors["firstName"])) { ?>
                         <!-- Error message for first name -->
                         <div class="text-red-500"><?= $errors["firstName"] ?></div>
@@ -40,7 +40,7 @@ $buttonClass = "bg-orange-600 rounded-md flex justify-center border-white border
 
                     <!-- Last name input -->
                     <label class="<?= $labelClass ?>" for="lastName">Nom</label>
-                    <input class="<?= $inputClass ?> <?= isset($errors['lastName']) ? $inputErrorClass : '' ?>" type="text" name="lastName" id="lastName" value="<?= $args['valeursEchappees']['lastName'] ?? '' ?>">
+                    <input class="<?= $inputClass ?> <?= isset($errors['lastName']) ? $inputErrorClass : '' ?>" type="text" name="lastName" id="lastName" value="<?= $args['valeursEchappees']['lastName'] ?? '' ?>" min="2" max="255" required>
                     <?php if (!empty($errors["lastName"])) { ?>
                         <!-- Error message for last name -->
                         <div class="text-red-500"><?= $errors["lastName"] ?></div>
@@ -48,7 +48,7 @@ $buttonClass = "bg-orange-600 rounded-md flex justify-center border-white border
 
                     <!-- Email input -->
                     <label class="<?= $labelClass ?>" for="email">Adresse email</label>
-                    <input class="<?= $inputClass ?> <?= isset($errors['email']) ? $inputErrorClass : '' ?>" type="email" name="email" id="email" value="<?= $args['valeursEchappees']['email'] ?? '' ?>">
+                    <input class="<?= $inputClass ?> <?= isset($errors['email']) ? $inputErrorClass : '' ?>" type="email" name="email" id="email" value="<?= $args['valeursEchappees']['email'] ?? '' ?>" required>
                     <?php if (!empty($errors["email"])) { ?>
                         <!-- Error message for email -->
                         <div class="text-red-500"><?= $errors["email"] ?></div>
@@ -56,7 +56,7 @@ $buttonClass = "bg-orange-600 rounded-md flex justify-center border-white border
 
                     <!-- Message textarea -->
                     <label class="<?= $labelClass ?>" for="message">Message</label>
-                    <textarea class="<?= $inputClass ?> <?= isset($errors['message']) ? $inputErrorClass : '' ?>" name="message" id="message" cols="30" rows="10"><?= $args['valeursEchappees']['message'] ?? '' ?></textarea>
+                    <textarea class="<?= $inputClass ?> <?= isset($errors['message']) ? $inputErrorClass : '' ?>" name="message" id="message" cols="30" rows="10" min="8" max="500" required><?= $args['valeursEchappees']['message'] ?? '' ?></textarea>
                     <?php if (!empty($errors["message"])) { ?>
                         <!-- Error message for message -->
                         <div class="text-red-500"><?= $errors["message"] ?></div>

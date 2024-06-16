@@ -9,7 +9,7 @@ ini_set('session.use_only_cookies', 1); // force sessions to only use cookies
 session_set_cookie_params([
   // 'lifetime' => $lifeTime, // uncomment to set the lifetime of the session cookie
   'path' => '/', // available in entire domain
-  'secure' => true, // set to true if using HTTPS
+  'secure' => false, // set to true if using HTTPS
   'httponly' => true, // prevent JavaScript access to the cookie
   'samesite' => 'lax' // set same-site policy to lax
 ]);
