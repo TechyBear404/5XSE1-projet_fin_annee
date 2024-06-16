@@ -57,12 +57,6 @@ function getTable()
 // Function to create a new post
 function createPost($title, $content)
 {
-  // Check if user is logged in
-  if (!isset($_SESSION['user'])) {
-    // echo 'Vous devez être connecté pour créer un post';
-    return ['error' => 'Vous devez être connecté pour créer un post'];
-  }
-
   // Get the table name
   $table = getTable();
   $sql = "INSERT INTO $table (postTitle, postContent, postUserID) VALUES (:title, :content, :userId)";
@@ -103,7 +97,7 @@ function removePost($postID)
 {
   // Check if user is logged in and owns the post
   $post = getPost($postID);
-  if (!isset($_SESSION['user']) || $post->postUserID !== $_SESSION['user']['id']) {
+  if ($post->postUserID !== $_SESSION['user']['id']) {
 
     return ['error' => 'Vous devez être connecté pour supprimer un post'];
   }
@@ -129,9 +123,7 @@ function editPostContent($postID, $content)
   // Check if user is logged in and owns the post
   $post = getPost($postID);
 
-  echo $post->postUserID;
-  echo $_SESSION['user']['id'];
-  if (!isset($_SESSION['user']) || $post->postUserID !== $_SESSION['user']['id']) {
+  if ($post->postUserID !== $_SESSION['user']['id']) {
     return ['error' => 'Vous devez être connecté pourne pouvez pas modifier ce post'];
   }
 

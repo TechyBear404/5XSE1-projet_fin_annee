@@ -34,7 +34,12 @@ function index(?array $args = []): void
  */
 function newPost(): void
 {
-    $formRules = getNewPostRules();
+    if (!isset($_SESSION['user'])) {
+        $args = [];
+        $args["errors"]["post"] = "Vous devez être connecté pour créer un post.";
+        index($args);
+        exit();
+    }
 
     if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"])) {
         $args["errors"]["tokenCSRF"] = "Une erreur s'est produite lors de la soumission du formulaire.";
@@ -44,6 +49,8 @@ function newPost(): void
         unset($_POST["tokenCSRF"]);
     }
 
+    $formRules = getNewPostRules();
+
     // Validate form input
     [$errors, $valeursEchappees] = verifChamps($formRules, $_POST);
     $args["errors"] = $errors;
@@ -51,16 +58,13 @@ function newPost(): void
 
     if (empty($errors)) {
         // Create a new post
-        echo '<pre> Valeurs échappées :</pre>';
-        if (!isset($_SESSION['user'])) {
-            $args["errors"]["post"] = "Vous devez être connecté pour créer un post.";
-            index($args);
-            exit();
-        }
+
         try {
             createPost($args["valeursEchappees"]['newTitle'], $args["valeursEchappees"]['newContent']);
+            $args = [];
             $args["success"]["post"] = "Le post a été créé avec succès.";
         } catch (Exception $e) {
+            $args = [];
             $args["errors"]["post"] = "Une erreur s'est produite lors de la création du post.";
         }
     }
@@ -72,6 +76,13 @@ function newPost(): void
  */
 function deletePost(): void
 {
+    if (!isset($_SESSION['user'])) {
+        $args = [];
+        $args["errors"]["post"] = "Vous devez être connecté pour suprimer un post.";
+        index($args);
+        exit();
+    }
+
     if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"])) {
         $args["errors"]["tokenCSRF"] = "Une erreur s'est produite lors de la soumission du formulaire.";
         index($args);
@@ -97,7 +108,12 @@ function deletePost(): void
  */
 function editPost(): void
 {
-    $formRules = getEditPostRules();
+    if (!isset($_SESSION['user'])) {
+        $args = [];
+        $args["errors"]["post"] = "Vous devez être connecté pour créer un post.";
+        index($args);
+        exit();
+    }
 
     if (!isset($_POST["tokenCSRF"]) || !checkCSRF($_POST["tokenCSRF"])) {
         $args["errors"]["post"] = "Une erreur s'est produite lors de la soumission du formulaire.";
@@ -106,6 +122,8 @@ function editPost(): void
     } else {
         unset($_POST["tokenCSRF"]);
     }
+
+    $formRules = getEditPostRules();
 
     // Validate form input
     [$errors, $valeursEchappees] = verifChamps($formRules, $_POST);
