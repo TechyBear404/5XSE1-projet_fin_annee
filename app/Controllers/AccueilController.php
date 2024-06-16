@@ -51,7 +51,6 @@ function newPost(): void
 
     if (empty($errors)) {
         // Create a new post
-        $args = [];
         echo '<pre> Valeurs échappées :</pre>';
         if (!isset($_SESSION['user'])) {
             $args["errors"]["post"] = "Vous devez être connecté pour créer un post.";
@@ -87,7 +86,6 @@ function deletePost(): void
     if (isset($post["error"])) {
         $args["errors"]["post"] = "Une erreur s'est produite lors de la suppression du post.";
     } else {
-        $args = [];
         $args["success"]["post"] = "Le post a été supprimé avec succès.";
     }
 
@@ -116,7 +114,6 @@ function editPost(): void
 
     if (empty($errors)) {
         // Edit the post
-        $args = [];
         $post = editPostContent($_POST['postID'], $args["valeursEchappees"]['editContent']);
 
         if (isset($post["error"])) {
